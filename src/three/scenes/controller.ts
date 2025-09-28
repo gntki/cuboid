@@ -2,6 +2,7 @@ import * as THREE from 'three'
 import {COLOR_BASE, GeometryPack} from "@constants/constants.ts";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from 'three/examples/jsm/libs/stats.module.js'
+import {Box} from "utils/geometry/box.ts";
 // @ts-ignore
 
 
@@ -14,10 +15,11 @@ export class Controller {
   private renderer: THREE.WebGLRenderer;
   private orbitControls: OrbitControls;
 
-  private activeIndex: number = -1;
-
   private clock: THREE.Clock;
   private stats;
+
+  cube: Box;
+  ground: Box;
 
 
   constructor(el: HTMLCanvasElement, size) {
@@ -35,9 +37,10 @@ export class Controller {
   init() {
     // this.createAxesHelper();
     this.createObjects();
+    this.createLights();
     this.createCamera();
     this.createRender();
-    // this.createStats();
+    this.createStats();
 
     this.setControls();
 
@@ -49,28 +52,41 @@ export class Controller {
 
 
   createAxesHelper() {
-    const axesHelper = new THREE.AxesHelper(3);
+    const axesHelper = new THREE.AxesHelper(7);
     this.scene.add(axesHelper);
   }
 
 
   createObjects() {
-    const mesh = new THREE.Mesh(GeometryPack[1], new THREE.MeshBasicMaterial({color: COLOR_BASE, wireframe: true}));
-    mesh.position.set(0, 0, 0);
-    this.scene.add(mesh);
+    this.cube = new Box(1, 1, 1, 0x00ff00, {x: 0, y: 3, z: 0}, {x:0,y:-.1,z:0});
+    this.ground = new Box(5, .5, 10, 0x0000ff, {x: 0, y: 0, z: 0}, {x:0,y:0,z:0});
+    this.scene.add(this.ground);
+    this.scene.add(this.cube);
+
+  }
+
+  createLights() {
+    const ambientLight = new THREE.AmbientLight(0xffffff, .5);
+    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
+    dirLight.position.set(0, 2, 3);
+    dirLight.castShadow = true;
+
+    this.scene.add(ambientLight);
+    this.scene.add(dirLight);
   }
 
 
   createCamera() {
     this.camera = new THREE.PerspectiveCamera(75, this.size.w / this.size.h);
+    this.camera.position.set(0, 3, 6);
     this.scene.add(this.camera);
-    this.camera.position.set(0, 0, 15);
   }
 
 
   createRender() {
     this.renderer = new THREE.WebGLRenderer({canvas: this.el});
     this.renderer.setSize(this.size.w, this.size.h);
+    this.renderer.shadowMap.enabled = true;
     this.renderer.render(this.scene, this.camera);
   }
 
@@ -89,10 +105,13 @@ export class Controller {
 
 
   tick() {
-    // this.stats.begin();
+    this.stats.begin();
     this.orbitControls.update();
+
+    this.cube.update(this.ground);
+
     this.renderer.render(this.scene, this.camera);
-    // this.stats.end();
+    this.stats.end();
     window.requestAnimationFrame(this.tick);
   }
 
