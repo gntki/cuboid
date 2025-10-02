@@ -108,6 +108,14 @@ export class Controller {
     this.stats.begin();
     this.orbitControls.update();
 
+    this.cube.velocity.x = 0;
+    this.cube.velocity.z = 0;
+
+    if(this.cube.keys.forward) this.cube.velocity.z -= .1;
+    if(this.cube.keys.back) this.cube.velocity.z += .1;
+    if(this.cube.keys.left) this.cube.velocity.x -= .1;
+    if(this.cube.keys.right) this.cube.velocity.x += .1;
+
     this.cube.update(this.ground);
 
     this.renderer.render(this.scene, this.camera);
