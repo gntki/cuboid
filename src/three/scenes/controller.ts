@@ -6,6 +6,8 @@ import {characterSettings, enemySettings, groundSettings} from "@constants/setti
 
 
 export class Controller {
+  private animationId: number = 0;
+
   private el: HTMLCanvasElement;
   private size: { w: number, h: number } = {w: 0, h: 0};
   private scene: THREE.Scene;
@@ -105,11 +107,12 @@ export class Controller {
 
 
   tick() {
-    const delta = Math.floor(this.clock.getElapsedTime());
+    this.animationId = requestAnimationFrame(this.tick);
+
     this.stats.begin();
     this.orbitControls.update();
 
-    if(delta != this.delta && delta%1===0) {
+    if(this.animationId % 100===0) {
       this.enemies.add(
         new Box({
           ...enemySettings,
@@ -119,7 +122,6 @@ export class Controller {
           }
         })
       )
-      this.delta = delta;
     }
 
     this.cube.velocity.x = 0;
@@ -132,14 +134,13 @@ export class Controller {
 
     this.cube.update(this.ground);
 
-    this.enemies.children.forEach((el, id) => {
-      if(el.position.y < -10) this.enemies.remove(this.enemies.children[id])
+    this.enemies.children.forEach(el => {
+      if(el.position.y < -10) this.enemies.remove(el)
       el?.update(this.ground)
     })
 
     this.renderer.render(this.scene, this.camera);
     this.stats.end();
-    window.requestAnimationFrame(this.tick);
   }
 
 
