@@ -9,6 +9,10 @@ export class Box extends THREE.Mesh {
   //sides
   top: number;
   bottom: number;
+  left: number;
+  right: number;
+  front: number
+  back: number
   //settings
   velocity = {x: 0, y: 0, z: 0}
   gravity: number = -0.01;
@@ -36,9 +40,7 @@ export class Box extends THREE.Mesh {
 
     this.initPosition(position);
     this.initVelocity(velocity);
-
-    this.top = this.position.y + this.height/2;
-    this.bottom = this.position.y - this.height/2;
+    this.updateSides();
 
     this.update = this.update.bind(this);
     this.addListeners();
@@ -56,13 +58,36 @@ export class Box extends THREE.Mesh {
     this.velocity.z = z;
   }
 
-
-  update(ground) {
+  updateSides() {
     this.top = this.position.y + this.height/2;
     this.bottom = this.position.y - this.height/2;
 
+    this.left = this.position.x - this.width/2;
+    this.right = this.position.x + this.width/2;
+
+    this.front = this.position.z - this.depth/2;
+    this.back = this.position.z + this.depth/2;
+  }
+
+
+  update(ground) {
+    this.updateSides();
+
     this.position.x += this.velocity.x;
     this.position.z += this.velocity.z;
+
+    // console.log('ff', this.front)
+    // console.log(this.back)
+
+    if (this.right >= ground.left && this.left <= ground.right) {
+      console.log('collusion x')
+    }
+    if (this.front <= ground.back && this.back >= ground.front) {
+      console.log('collusion z')
+    }
+    if(this.bottom + this.velocity.y <= ground.top) {
+      console.log('collusion y')
+    }
 
     this.applyGravity(ground);
   }
@@ -70,12 +95,20 @@ export class Box extends THREE.Mesh {
   applyGravity(ground) {
     this.velocity.y += this.gravity;
 
-    if(this.bottom + this.velocity.y <= ground.top) {
+    if(this.checkCollusion(this, ground)) {
       this.velocity.y *= .8;
       this.velocity.y = - this.velocity.y
     } else this.position.y += this.velocity.y
   }
 
+  checkCollusion(box1, box2) {
+    const collusiontX = box1.right >= box2.left && box1.left <= box2.right;
+    const collusiontZ = box1.front <= box2.back && box1.back >= box2.front;
+    const collusiontY = box1.bottom + box1.velocity.y <= box2.top;
+
+    return collusiontX && collusiontZ && collusiontY
+
+  }
 
   keyCodeHandler(code, value) {
     switch (true) {
