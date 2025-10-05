@@ -22,5 +22,6 @@ export const enemySettings = {
   depth: 1,
   color: 0xff0000,
   position: {x: 0, y: 3, z: -5},
-  velocity: {x: 0, y: 0, z: .05}
+  velocity: {x: 0, y: 0, z: .05},
+  zAcceleration: true
 }

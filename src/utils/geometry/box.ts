@@ -16,6 +16,7 @@ export class Box extends THREE.Mesh {
   //settings
   velocity = {x: 0, y: 0, z: 0}
   gravity: number = -0.01;
+  zAcceleration: boolean;
   keys = {
     forward: false,
     back: false,
@@ -24,7 +25,7 @@ export class Box extends THREE.Mesh {
     jump: false
   }
 
-  constructor({width, height, depth, color = 0x00ff00, position, velocity}) {
+  constructor({width, height, depth, color = 0x00ff00, position, velocity, zAcceleration = false}) {
     super(
       new THREE.BoxGeometry(width, height, depth),
       new THREE.MeshStandardMaterial({color: color})
@@ -34,6 +35,7 @@ export class Box extends THREE.Mesh {
     this.height = height;
     this.depth = depth;
     this.color = color;
+    this.zAcceleration = zAcceleration
 
     this.castShadow = true;
     this.receiveShadow = true;
@@ -72,6 +74,10 @@ export class Box extends THREE.Mesh {
 
   update(ground) {
     this.updateSides();
+
+    if(this.zAcceleration) {
+      this.velocity.z += .001;
+    }
 
     this.position.x += this.velocity.x;
     this.position.z += this.velocity.z;
