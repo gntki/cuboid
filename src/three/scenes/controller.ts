@@ -1,25 +1,25 @@
 import * as THREE from 'three'
-import {COLOR_BASE, GeometryPack} from "@constants/constants.ts";
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from 'three/examples/jsm/libs/stats.module.js'
 import {Box} from "utils/geometry/box.ts";
-// @ts-ignore
+import {characterSettings, enemySettings, groundSettings} from "@constants/settings.ts";
 
 
 export class Controller {
   private el: HTMLCanvasElement;
   private size: { w: number, h: number } = {w: 0, h: 0};
   private scene: THREE.Scene;
-  private group: THREE.Group;
   private camera: THREE.PerspectiveCamera;
   private renderer: THREE.WebGLRenderer;
   private orbitControls: OrbitControls;
 
-  private clock: THREE.Clock;
+  private clock: THREE.Clock = new THREE.Clock();
   private stats;
 
   cube: Box;
   ground: Box;
+  enemies: THREE.Group = new THREE.Group;
+  delta: number = 0;
 
 
   constructor(el: HTMLCanvasElement, size) {
@@ -44,7 +44,6 @@ export class Controller {
 
     this.setControls();
 
-    this.clock = new THREE.Clock();
     this.tick();
 
     this.addResizeListener();
@@ -58,11 +57,12 @@ export class Controller {
 
 
   createObjects() {
-    this.cube = new Box(1, 1, 1, 0x00ff00, {x: 0, y: 3, z: 0}, {x:0,y:-.1,z:0});
-    this.ground = new Box(5, .5, 10, 0x0000ff, {x: 0, y: 0, z: 0}, {x:0,y:0,z:0});
+    this.cube = new Box(characterSettings);
+    this.ground = new Box(groundSettings);
+
     this.scene.add(this.ground);
     this.scene.add(this.cube);
-
+    this.scene.add(this.enemies);
   }
 
   createLights() {
@@ -105,8 +105,22 @@ export class Controller {
 
 
   tick() {
+    const delta = Math.floor(this.clock.getElapsedTime());
     this.stats.begin();
     this.orbitControls.update();
+
+    if(delta != this.delta && delta%1===0) {
+      this.enemies.add(
+        new Box({
+          ...enemySettings,
+          position: {
+            ...enemySettings.position,
+            x: Math.random() * (-2 - 2) + 2
+          }
+        })
+      )
+      this.delta = delta;
+    }
 
     this.cube.velocity.x = 0;
     this.cube.velocity.z = 0;
@@ -117,6 +131,11 @@ export class Controller {
     if(this.cube.keys.right) this.cube.velocity.x += .1;
 
     this.cube.update(this.ground);
+
+    this.enemies.children.forEach((el, id) => {
+      if(el.position.y < -10) this.enemies.remove(this.enemies.children[id])
+      el?.update(this.ground)
+    })
 
     this.renderer.render(this.scene, this.camera);
     this.stats.end();

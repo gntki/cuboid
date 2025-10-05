@@ -24,7 +24,7 @@ export class Box extends THREE.Mesh {
     jump: false
   }
 
-  constructor(width, height, depth, color = 0x00ff00, position, velocity) {
+  constructor({width, height, depth, color = 0x00ff00, position, velocity}) {
     super(
       new THREE.BoxGeometry(width, height, depth),
       new THREE.MeshStandardMaterial({color: color})
@@ -75,19 +75,6 @@ export class Box extends THREE.Mesh {
 
     this.position.x += this.velocity.x;
     this.position.z += this.velocity.z;
-
-    // console.log('ff', this.front)
-    // console.log(this.back)
-
-    if (this.right >= ground.left && this.left <= ground.right) {
-      console.log('collusion x')
-    }
-    if (this.front <= ground.back && this.back >= ground.front) {
-      console.log('collusion z')
-    }
-    if(this.bottom + this.velocity.y <= ground.top) {
-      console.log('collusion y')
-    }
 
     this.applyGravity(ground);
   }
