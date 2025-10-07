@@ -3,6 +3,7 @@ import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from 'three/examples/jsm/libs/stats.module.js'
 import {Box} from "utils/geometry/box.ts";
 import {characterSettings, enemySettings, groundSettings} from "@constants/settings.ts";
+import {enemySpanSpeed} from "utils/enemySpanSpeed.ts";
 
 
 export class Controller {
@@ -80,7 +81,7 @@ export class Controller {
 
   createCamera() {
     this.camera = new THREE.PerspectiveCamera(75, this.size.w / this.size.h);
-    this.camera.position.set(0, 3, 6);
+    this.camera.position.set(0, 4, 6);
     this.scene.add(this.camera);
   }
 
@@ -113,13 +114,17 @@ export class Controller {
     this.stats.begin();
     this.orbitControls.update();
 
-    if(this.animationId % 100===0) {
+    const mn = enemySpanSpeed(this.animationId)
+    console.log('mn ----> ', mn)
+    console.log('this.animationId', this.animationId)
+
+    if(this.animationId % mn===0) {
       this.enemies.add(
         new Box({
           ...enemySettings,
           position: {
             ...enemySettings.position,
-            x: Math.random() * (-2 - 2) + 2
+            x: Math.random() * (-5 - 5) + 5
           }
         })
       )

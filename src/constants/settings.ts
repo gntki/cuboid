@@ -8,11 +8,11 @@ export const characterSettings = {
 }
 
 export const groundSettings = {
-  width: 5,
+  width: 10,
   height: .1,
-  depth: 10,
+  depth: 50,
   color: 0x0000ff,
-  position: {x: 0, y: 0, z: 0},
+  position: {x: 0, y: 0, z: -20},
   velocity: {x: 0, y: 0, z: 0}
 }
 
@@ -21,7 +21,7 @@ export const enemySettings = {
   height: 1,
   depth: 1,
   color: 0xff0000,
-  position: {x: 0, y: 3, z: -5},
+  position: {x: 0, y: 3, z: -35},
   velocity: {x: 0, y: 0, z: .05},
   zAcceleration: true
 }
