@@ -4,6 +4,8 @@ import Stats from 'three/examples/jsm/libs/stats.module.js'
 import {Box} from "utils/geometry/box.ts";
 import {characterSettings, enemySettings, groundSettings} from "@constants/settings.ts";
 import {enemySpanSpeed} from "utils/enemySpanSpeed.ts";
+import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
+import {ModelController} from "utils/controllers/modelController.ts";
 
 
 export class Controller {
@@ -22,7 +24,8 @@ export class Controller {
   cube: Box;
   ground: Box;
   enemies: THREE.Group = new THREE.Group;
-  delta: number = 0;
+
+  modelController: ModelController;
 
 
   constructor(el: HTMLCanvasElement, size) {
@@ -39,6 +42,7 @@ export class Controller {
 
   init() {
     // this.createAxesHelper();
+    this.createModels();
     this.createObjects();
     this.createLights();
     this.createCamera();
@@ -58,6 +62,25 @@ export class Controller {
     this.scene.add(axesHelper);
   }
 
+  createModels() {
+    const loader = new GLTFLoader();
+
+    loader.load(
+      'src/models/stone/scene.gltf',
+      gltf => {
+        this.modelController = new ModelController(gltf);
+        this.modelController.enableShadows();
+
+        // this.scene.add(this.modelController.model);
+      },
+      xhr => {
+        console.log((xhr.loaded / xhr.total * 100) + '% loaded')
+      },
+      error => {
+        console.log('Error: ', error)
+      }
+    )
+  }
 
   createObjects() {
     this.cube = new Box(characterSettings);
@@ -115,8 +138,6 @@ export class Controller {
     this.orbitControls.update();
 
     const mn = enemySpanSpeed(this.animationId)
-    console.log('mn ----> ', mn)
-    console.log('this.animationId', this.animationId)
 
     if(this.animationId % mn===0) {
       this.enemies.add(
@@ -124,8 +145,10 @@ export class Controller {
           ...enemySettings,
           position: {
             ...enemySettings.position,
-            x: Math.random() * (-5 - 5) + 5
-          }
+            x: Math.random() * (-4.5 - 4.5) + 4.5
+          },
+          model: this.modelController.model,
+          scene: this.scene
         })
       )
     }

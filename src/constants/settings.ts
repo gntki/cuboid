@@ -17,9 +17,9 @@ export const groundSettings = {
 }
 
 export const enemySettings = {
-  width: 1,
-  height: 1,
-  depth: 1,
+  width: 1.5,
+  height: 1.5,
+  depth: 1.5,
   color: 0xff0000,
   position: {x: 0, y: 3, z: -35},
   velocity: {x: 0, y: 0, z: .05},

@@ -25,10 +25,12 @@ export class Box extends THREE.Mesh {
     jump: false
   }
 
-  constructor({width, height, depth, color = 0x00ff00, position, velocity, zAcceleration = false}) {
+  innerModel
+
+  constructor({width, height, depth, color = 0x00ff00, position, velocity, zAcceleration = false, model = null, scene = null}) {
     super(
       new THREE.BoxGeometry(width, height, depth),
-      new THREE.MeshStandardMaterial({color: color})
+      new THREE.MeshStandardMaterial({color: color, visible: !zAcceleration})
     );
 
     this.width = width;
@@ -42,11 +44,14 @@ export class Box extends THREE.Mesh {
 
     this.initPosition(position);
     this.initVelocity(velocity);
+    this.addModel(model, scene);
     this.updateSides();
 
     this.update = this.update.bind(this);
     this.addListeners();
   }
+
+
 
   initPosition(position) {
     const {x, y, z} = position;
@@ -59,6 +64,14 @@ export class Box extends THREE.Mesh {
     this.velocity.y = y;
     this.velocity.z = z;
   }
+
+  addModel(model, scene) {
+    if(!model) return;
+    this.innerModel = model.clone();
+    this.innerModel.scale.set(0.8, 0.8, 0.8);
+    this.add(this.innerModel);
+  }
+
 
   updateSides() {
     this.top = this.position.y + this.height/2;
@@ -82,6 +95,9 @@ export class Box extends THREE.Mesh {
     this.position.x += this.velocity.x;
     this.position.z += this.velocity.z;
 
+    if(this.innerModel) {
+      this.innerModel.rotation.x += this.velocity.z;
+    }
     this.applyGravity(ground);
   }
 
