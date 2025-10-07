@@ -9,7 +9,7 @@ export const characterSettings = {
 
 export const groundSettings = {
   width: 5,
-  height: .5,
+  height: .1,
   depth: 10,
   color: 0x0000ff,
   position: {x: 0, y: 0, z: 0},

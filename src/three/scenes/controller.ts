@@ -108,6 +108,7 @@ export class Controller {
 
   tick() {
     this.animationId = requestAnimationFrame(this.tick);
+    this.renderer.render(this.scene, this.camera);
 
     this.stats.begin();
     this.orbitControls.update();
@@ -137,9 +138,13 @@ export class Controller {
     this.enemies.children.forEach(el => {
       if(el.position.y < -10) this.enemies.remove(el)
       el?.update(this.ground)
+
+      if(this.cube.checkCollusion(this.cube, el)) {
+        cancelAnimationFrame(this.animationId)
+      }
     })
 
-    this.renderer.render(this.scene, this.camera);
+
     this.stats.end();
   }
 
