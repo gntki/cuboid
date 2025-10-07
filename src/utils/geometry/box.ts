@@ -2,9 +2,7 @@ import * as THREE from 'three'
 
 export class Box extends THREE.Mesh {
   //main
-  width: number;
-  height: number;
-  depth: number;
+  sizes;
   color: number
   //sides
   top: number;
@@ -28,15 +26,13 @@ export class Box extends THREE.Mesh {
   innerModel
   animations
 
-  constructor({width, height, depth, color = 0x00ff00, position, velocity, isRunner = false, model = null, modelScale = null}) {
+  constructor({sizes, color = 0x00ff00, position, velocity, isRunner = false, model = null, modelScale = null}) {
     super(
-      new THREE.BoxGeometry(width, height, depth),
+      new THREE.BoxGeometry(sizes.width, sizes.height, sizes.depth),
       new THREE.MeshStandardMaterial({color: color, visible: true, wireframe: true})
     );
 
-    this.width = width;
-    this.height = height;
-    this.depth = depth;
+    this.sizes = sizes;
     this.color = color;
     this.isRunner = isRunner
 
@@ -82,14 +78,17 @@ export class Box extends THREE.Mesh {
 
 
   updateSides() {
-    this.top = this.position.y + this.height/2;
-    this.bottom = this.position.y - this.height/2;
+    const {x, y, z} = this.position;
+    const {width, height, depth} = this.sizes;
 
-    this.left = this.position.x - this.width/2;
-    this.right = this.position.x + this.width/2;
+    this.top = y + height/2;
+    this.bottom = y - height/2;
 
-    this.front = this.position.z - this.depth/2;
-    this.back = this.position.z + this.depth/2;
+    this.left = x - width/2;
+    this.right = x + width/2;
+
+    this.front = z - depth/2;
+    this.back = z + depth/2;
   }
 
 
