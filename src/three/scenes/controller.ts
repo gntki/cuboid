@@ -26,6 +26,7 @@ export class Controller {
   enemies: THREE.Group = new THREE.Group;
 
   modelController: ModelController;
+  modelControllerHuman: ModelController;
 
 
   constructor(el: HTMLCanvasElement, size) {
@@ -40,10 +41,11 @@ export class Controller {
   }
 
 
-  init() {
+  async init() {
     // this.createAxesHelper();
-    this.createModels();
+    await this.createModels();
     this.createObjects();
+
     this.createLights();
     this.createCamera();
     this.createRender();
@@ -65,25 +67,51 @@ export class Controller {
   createModels() {
     const loader = new GLTFLoader();
 
-    loader.load(
-      'src/models/stone/scene.gltf',
-      gltf => {
-        this.modelController = new ModelController(gltf);
-        this.modelController.enableShadows();
+    const stonePromise = new Promise((resolve) => {
+      loader.load(
+        'src/models/stone/scene.gltf',
+        gltf => {
+          this.modelController = new ModelController(gltf);
+          this.modelController.enableShadows();
+          resolve();
+        },
+        xhr => {
+          console.log((xhr.loaded / xhr.total * 100) + '% loaded');
+        },
+        error => {
+          console.log('Error: ', error);
+          resolve();
+        }
+      )
+    })
 
-        // this.scene.add(this.modelController.model);
-      },
-      xhr => {
-        console.log((xhr.loaded / xhr.total * 100) + '% loaded')
-      },
-      error => {
-        console.log('Error: ', error)
-      }
-    )
+    const humanPromise = new Promise((resolve) => {
+      loader.load(
+        'src/models/runner/scene.gltf',
+        gltf => {
+          this.modelControllerHuman = new ModelController(gltf);
+          this.modelControllerHuman.enableShadows();
+          resolve();
+        },
+        xhr => {
+          console.log((xhr.loaded / xhr.total * 100) + '% loaded')
+        },
+        error => {
+          console.log('Error: ', error)
+          resolve();
+        }
+      )
+    })
+
+    return Promise.all([stonePromise, humanPromise])
   }
 
   createObjects() {
-    this.cube = new Box(characterSettings);
+    this.cube = new Box(
+      {
+        ...characterSettings,
+        model: this.modelControllerHuman,
+      });
     this.ground = new Box(groundSettings);
 
     this.scene.add(this.ground);
@@ -139,7 +167,7 @@ export class Controller {
 
     const mn = enemySpanSpeed(this.animationId)
 
-    if(this.animationId % mn===0) {
+    if (this.animationId % mn === 0) {
       this.enemies.add(
         new Box({
           ...enemySettings,
@@ -147,8 +175,7 @@ export class Controller {
             ...enemySettings.position,
             x: Math.random() * (-4.5 - 4.5) + 4.5
           },
-          model: this.modelController.model,
-          scene: this.scene
+          model: this.modelController,
         })
       )
     }
@@ -156,18 +183,18 @@ export class Controller {
     this.cube.velocity.x = 0;
     this.cube.velocity.z = 0;
 
-    if(this.cube.keys.forward) this.cube.velocity.z -= .1;
-    if(this.cube.keys.back) this.cube.velocity.z += .1;
-    if(this.cube.keys.left) this.cube.velocity.x -= .1;
-    if(this.cube.keys.right) this.cube.velocity.x += .1;
+    if (this.cube.keys.forward) this.cube.velocity.z -= .1;
+    if (this.cube.keys.back) this.cube.velocity.z += .1;
+    if (this.cube.keys.left) this.cube.velocity.x -= .1;
+    if (this.cube.keys.right) this.cube.velocity.x += .1;
 
     this.cube.update(this.ground);
 
     this.enemies.children.forEach(el => {
-      if(el.position.y < -10) this.enemies.remove(el)
+      if (el.position.y < -10) this.enemies.remove(el)
       el?.update(this.ground)
 
-      if(this.cube.checkCollusion(this.cube, el)) {
+      if (this.cube.checkCollusion(this.cube, el)) {
         cancelAnimationFrame(this.animationId)
       }
     })

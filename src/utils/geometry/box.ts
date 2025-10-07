@@ -16,7 +16,6 @@ export class Box extends THREE.Mesh {
   //settings
   velocity = {x: 0, y: 0, z: 0}
   gravity: number = -0.01;
-  zAcceleration: boolean;
   keys = {
     forward: false,
     back: false,
@@ -25,26 +24,30 @@ export class Box extends THREE.Mesh {
     jump: false
   }
 
+  isRunner: boolean = false;
   innerModel
+  animations
 
-  constructor({width, height, depth, color = 0x00ff00, position, velocity, zAcceleration = false, model = null, scene = null}) {
+  constructor({width, height, depth, color = 0x00ff00, position, velocity, isRunner = false, model = null, modelScale = null}) {
     super(
       new THREE.BoxGeometry(width, height, depth),
-      new THREE.MeshStandardMaterial({color: color, visible: !zAcceleration})
+      new THREE.MeshStandardMaterial({color: color, visible: true, wireframe: true})
     );
 
     this.width = width;
     this.height = height;
     this.depth = depth;
     this.color = color;
-    this.zAcceleration = zAcceleration
+    this.isRunner = isRunner
 
-    this.castShadow = true;
-    this.receiveShadow = true;
 
     this.initPosition(position);
     this.initVelocity(velocity);
-    this.addModel(model, scene);
+
+    if(model) {
+      this.addModel(model, modelScale);
+    }
+
     this.updateSides();
 
     this.update = this.update.bind(this);
@@ -65,11 +68,16 @@ export class Box extends THREE.Mesh {
     this.velocity.z = z;
   }
 
-  addModel(model, scene) {
+  addModel(model, modelScale) {
     if(!model) return;
-    this.innerModel = model.clone();
-    this.innerModel.scale.set(0.8, 0.8, 0.8);
+    this.innerModel = this.isRunner ? model.model :  model.model.clone();
+    this.animations = model.animations
+    const {x,y,z} = modelScale;
+    this.innerModel.scale.set(x, y, z);
+    this.innerModel.position.y = this.isRunner ? -.5 : 0;
+    this.innerModel.rotation.y = Math.PI;
     this.add(this.innerModel);
+
   }
 
 
@@ -88,14 +96,14 @@ export class Box extends THREE.Mesh {
   update(ground) {
     this.updateSides();
 
-    if(this.zAcceleration) {
+    if(!this.isRunner) {
       this.velocity.z += .001;
     }
 
     this.position.x += this.velocity.x;
     this.position.z += this.velocity.z;
 
-    if(this.innerModel) {
+    if(this.innerModel && !this.isRunner) {
       this.innerModel.rotation.x += this.velocity.z;
     }
     this.applyGravity(ground);
