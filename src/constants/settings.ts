@@ -1,6 +1,6 @@
 export const characterSettings = {
   sizes: {
-    width: .5,
+    width: .4,
     height: 1.3,
     depth: .7,
   },

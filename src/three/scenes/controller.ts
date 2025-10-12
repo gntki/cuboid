@@ -81,13 +81,17 @@ export class Controller {
   }
 
   createLights() {
-    const ambientLight = new THREE.AmbientLight(0xffffff, .5);
-    const dirLight = new THREE.DirectionalLight(0xffffff, 1);
-    dirLight.position.set(0, 2, 3);
+    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
+    const dirLight = new THREE.DirectionalLight(0xffffff, .6);
+    dirLight.position.set(0, 4, 6 );
+    dirLight.target.position.set(0, 0, -30)
     dirLight.castShadow = true;
 
     this.scene.add(ambientLight);
+    // const shadowHelper = new THREE.CameraHelper(dirLight.shadow.camera);
+    // this.scene.add(shadowHelper);
     this.scene.add(dirLight);
+    this.scene.add(dirLight.target);
   }
 
 

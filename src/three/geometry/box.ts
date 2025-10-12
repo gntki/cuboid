@@ -72,7 +72,7 @@ export class Box extends THREE.Mesh {
 
     if(this.role === 'runner') {
       this.model = modelController.scene;
-      this.model.position.y = -.5;
+      this.model.position.y = -.7;
     } else if(this.role === 'enemy') {
       this.model = modelController.scene.clone();
       this.model.position.y = 0;
