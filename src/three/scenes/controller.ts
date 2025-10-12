@@ -81,10 +81,10 @@ export class Controller {
   }
 
   createLights() {
-    const ambientLight = new THREE.AmbientLight(0xffffff, 1);
-    const dirLight = new THREE.DirectionalLight(0xffffff, .6);
-    dirLight.position.set(0, 4, 6 );
-    dirLight.target.position.set(0, 0, -30)
+    const ambientLight = new THREE.AmbientLight(0xffffff, .8);
+    const dirLight = new THREE.DirectionalLight(0xffffff, .7);
+    dirLight.position.set(0, 5, 15 );
+    dirLight.target.position.set(0, 4, -10)
     dirLight.castShadow = true;
 
     this.scene.add(ambientLight);
@@ -97,13 +97,13 @@ export class Controller {
 
   createCamera() {
     this.camera = new THREE.PerspectiveCamera(75, this.size.w / this.size.h);
-    this.camera.position.set(0, 4, 6);
+    this.camera.position.set(0, 3, 6);
     this.scene.add(this.camera);
   }
 
 
   createRender() {
-    this.renderer = new THREE.WebGLRenderer({canvas: this.el});
+    this.renderer = new THREE.WebGLRenderer({canvas: this.el, alpha: true});
     this.renderer.setSize(this.size.w, this.size.h);
     this.renderer.shadowMap.enabled = true;
     this.renderer.render(this.scene, this.camera);

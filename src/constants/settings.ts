@@ -17,7 +17,7 @@ export const groundSettings = {
     height: .1,
     depth: 50
   },
-  color: 0x0000ff,
+  color: 0xa300ff,
   position: {x: 0, y: 0, z: -20},
   velocity: {x: 0, y: 0, z: 0},
   role: 'ground'
