@@ -5,7 +5,7 @@ export const characterSettings = {
     depth: .7,
   },
   color: 0x00ff00,
-  position: {x: 0, y: 3, z: 0},
+  position: {x: 0, y: 0, z: 3},
   velocity: {x: 0, y: -.1, z: 0},
   modelScale: {x: .7, y: .7, z: .7},
   role: 'runner'
