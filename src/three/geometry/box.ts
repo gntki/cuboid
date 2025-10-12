@@ -22,26 +22,29 @@ export class Box extends THREE.Mesh {
     jump: false
   }
 
-  isRunner: boolean = false;
-  innerModel
+  role: string = '';
+  model
   animations
 
-  constructor({sizes, color = 0x00ff00, position, velocity, isRunner = false, model = null, modelScale = null}) {
+  constructor({sizes, color = 0x00ff00, position, velocity, role, modelController = null, modelScale = null}) {
     super(
       new THREE.BoxGeometry(sizes.width, sizes.height, sizes.depth),
-      new THREE.MeshStandardMaterial({color: color, visible: true, wireframe: true})
+      new THREE.MeshStandardMaterial({color: color, visible: !modelController})
     );
 
     this.sizes = sizes;
     this.color = color;
-    this.isRunner = isRunner
-
+    this.role = role;
 
     this.initPosition(position);
     this.initVelocity(velocity);
 
-    if(model) {
-      this.addModel(model, modelScale);
+    if(role === 'ground') {
+      this.receiveShadow = true;
+    }
+
+    if(modelController) {
+      this.addModel(modelController, modelScale);
     }
 
     this.updateSides();
@@ -64,18 +67,35 @@ export class Box extends THREE.Mesh {
     this.velocity.z = z;
   }
 
-  addModel(model, modelScale) {
-    if(!model) return;
-    this.innerModel = this.isRunner ? model.model :  model.model.clone();
-    this.animations = model.animations
-    const {x,y,z} = modelScale;
-    this.innerModel.scale.set(x, y, z);
-    this.innerModel.position.y = this.isRunner ? -.5 : 0;
-    this.innerModel.rotation.y = Math.PI;
-    this.add(this.innerModel);
+  addModel(modelController, modelScale) {
+    if(!modelController) return;
 
+    if(this.role === 'runner') {
+      this.model = modelController.scene;
+      this.model.position.y = -.5;
+    } else if(this.role === 'enemy') {
+      this.model = modelController.scene.clone();
+      this.model.position.y = 0;
+    }
+
+    this.animations = modelController.animations
+
+    const {x,y,z} = modelScale;
+    this.model.scale.set(x, y, z);
+    this.model.rotation.y = Math.PI;
+    this.add(this.model);
+
+    if(this.animations) {
+      this.initAnimation()
+    }
   }
 
+  initAnimation() {
+    console.log('animations: ', this.animations);
+
+    if(this.role !== 'runner') return;
+    this.animations.Animation.play();
+  }
 
   updateSides() {
     const {x, y, z} = this.position;
@@ -95,15 +115,15 @@ export class Box extends THREE.Mesh {
   update(ground) {
     this.updateSides();
 
-    if(!this.isRunner) {
+    if(this.role === "runner" ||  this.role === "enemy") {
       this.velocity.z += .001;
     }
 
     this.position.x += this.velocity.x;
     this.position.z += this.velocity.z;
 
-    if(this.innerModel && !this.isRunner) {
-      this.innerModel.rotation.x += this.velocity.z;
+    if(this.role === "enemy") {
+      this.model.rotation.x += this.velocity.z;
     }
     this.applyGravity(ground);
   }

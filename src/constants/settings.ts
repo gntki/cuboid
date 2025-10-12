@@ -8,7 +8,7 @@ export const characterSettings = {
   position: {x: 0, y: 3, z: 0},
   velocity: {x: 0, y: -.1, z: 0},
   modelScale: {x: .7, y: .7, z: .7},
-  isRunner: true
+  role: 'runner'
 }
 
 export const groundSettings = {
@@ -19,7 +19,8 @@ export const groundSettings = {
   },
   color: 0x0000ff,
   position: {x: 0, y: 0, z: -20},
-  velocity: {x: 0, y: 0, z: 0}
+  velocity: {x: 0, y: 0, z: 0},
+  role: 'ground'
 }
 
 export const enemySettings = {
@@ -31,5 +32,6 @@ export const enemySettings = {
   color: 0xff0000,
   position: {x: 0, y: 3, z: -35},
   velocity: {x: 0, y: 0, z: .05},
-  modelScale: {x: .8, y: .8, z: .8}
+  modelScale: {x: .8, y: .8, z: .8},
+  role: 'enemy'
 }

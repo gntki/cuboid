@@ -1,11 +1,10 @@
 import * as THREE from 'three'
 import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
 import Stats from 'three/examples/jsm/libs/stats.module.js'
-import {Box} from "utils/geometry/box.ts";
+import {Box} from "three/geometry/box.ts";
 import {characterSettings, enemySettings, groundSettings} from "@constants/settings.ts";
 import {enemySpanSpeed} from "utils/enemySpanSpeed.ts";
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-import {ModelController} from "utils/controllers/modelController.ts";
+import {ModelController} from "three/controllers/modelController.ts";
 
 
 export class Controller {
@@ -23,10 +22,9 @@ export class Controller {
 
   cube: Box;
   ground: Box;
+  characterController: ModelController;
+  enemyController: ModelController;
   enemies: THREE.Group = new THREE.Group;
-
-  modelController: ModelController;
-  modelControllerHuman: ModelController;
 
 
   constructor(el: HTMLCanvasElement, size) {
@@ -64,53 +62,16 @@ export class Controller {
     this.scene.add(axesHelper);
   }
 
-  createModels() {
-    const loader = new GLTFLoader();
-
-    const stonePromise = new Promise((resolve) => {
-      loader.load(
-        'src/models/stone/scene.gltf',
-        gltf => {
-          this.modelController = new ModelController(gltf);
-          this.modelController.enableShadows();
-          resolve();
-        },
-        xhr => {
-          console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-        },
-        error => {
-          console.log('Error: ', error);
-          resolve();
-        }
-      )
-    })
-
-    const humanPromise = new Promise((resolve) => {
-      loader.load(
-        'src/models/runner/scene.gltf',
-        gltf => {
-          this.modelControllerHuman = new ModelController(gltf);
-          this.modelControllerHuman.enableShadows();
-          resolve();
-        },
-        xhr => {
-          console.log((xhr.loaded / xhr.total * 100) + '% loaded')
-        },
-        error => {
-          console.log('Error: ', error)
-          resolve();
-        }
-      )
-    })
-
-    return Promise.all([stonePromise, humanPromise])
+  async createModels() {
+    this.characterController = await ModelController.create('src/models/runner/scene.gltf', true);
+    this.enemyController = await ModelController.create('src/models/stone/scene.gltf', true);
   }
 
   createObjects() {
     this.cube = new Box(
       {
         ...characterSettings,
-        model: this.modelControllerHuman,
+        modelController: this.characterController,
       });
     this.ground = new Box(groundSettings);
 
@@ -162,6 +123,8 @@ export class Controller {
     this.animationId = requestAnimationFrame(this.tick);
     this.renderer.render(this.scene, this.camera);
 
+    const delta = this.clock.getDelta();
+
     this.stats.begin();
     this.orbitControls.update();
 
@@ -175,7 +138,7 @@ export class Controller {
             ...enemySettings.position,
             x: Math.random() * (-4.5 - 4.5) + 4.5
           },
-          model: this.modelController,
+          modelController: this.enemyController,
         })
       )
     }
@@ -189,6 +152,7 @@ export class Controller {
     if (this.cube.keys.right) this.cube.velocity.x += .1;
 
     this.cube.update(this.ground);
+    this.characterController.updateMixer(delta)
 
     this.enemies.children.forEach(el => {
       if (el.position.y < -10) this.enemies.remove(el)
