@@ -122,17 +122,8 @@ export class Controller {
     this.orbitControls.enableDamping = true;
   }
 
-
-  tick() {
-    this.animationId = requestAnimationFrame(this.tick);
-    this.renderer.render(this.scene, this.camera);
-
-    const delta = this.clock.getDelta();
-
-    this.stats.begin();
-    this.orbitControls.update();
-
-    const mn = enemySpanSpeed(this.animationId)
+  enemySpawn(id) {
+    const mn = enemySpanSpeed(id)
 
     if (this.animationId % mn === 0) {
       this.enemies.add(
@@ -146,27 +137,36 @@ export class Controller {
         })
       )
     }
+  }
 
-    this.cube.velocity.x = 0;
-    this.cube.velocity.z = 0;
+  sceneUpdate() {
+    const delta = this.clock.getDelta();
+    const _delta = delta * 42;
 
-    if (this.cube.keys.forward) this.cube.velocity.z -= .1;
-    if (this.cube.keys.back) this.cube.velocity.z += .1;
-    if (this.cube.keys.left) this.cube.velocity.x -= .1;
-    if (this.cube.keys.right) this.cube.velocity.x += .1;
+    this.orbitControls.update();
 
-    this.cube.update(this.ground);
+    this.enemySpawn(this.animationId)
+
+    this.cube.update(this.ground, _delta);
     this.characterController.updateMixer(delta)
 
     this.enemies.children.forEach(el => {
       if (el.position.y < -10) this.enemies.remove(el)
-      el?.update(this.ground)
+      el?.update(this.ground, _delta)
 
       if (this.cube.checkCollusion(this.cube, el)) {
         cancelAnimationFrame(this.animationId)
       }
     })
+  }
 
+  tick() {
+    this.animationId = requestAnimationFrame(this.tick);
+    this.renderer.render(this.scene, this.camera);
+
+    this.stats.begin();
+
+    this.sceneUpdate()
 
     this.stats.end();
   }

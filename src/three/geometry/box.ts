@@ -89,8 +89,6 @@ export class Box extends THREE.Mesh {
   }
 
   initAnimation() {
-    console.log('animations: ', this.animations);
-
     if(this.role !== 'runner') return;
     this.animations.Animation.play();
   }
@@ -110,17 +108,18 @@ export class Box extends THREE.Mesh {
   }
 
 
-  update(ground) {
+  update(ground, delta) {
     this.updateSides();
 
-    if(this.role === "runner" ||  this.role === "enemy") {
-      this.velocity.z += .001;
+    if(this.role === 'runner') {
+      this.movementHandler(delta)
     }
 
     this.position.x += this.velocity.x;
     this.position.z += this.velocity.z;
 
     if(this.role === "enemy") {
+      this.velocity.z += .001 * delta;
       this.model.rotation.x += this.velocity.z;
     }
     this.applyGravity(ground);
@@ -159,6 +158,16 @@ export class Box extends THREE.Mesh {
         this.keys.right = value;
         break;
     }
+  }
+
+  movementHandler(delta) {
+    this.velocity.x = 0;
+    this.velocity.z = 0;
+
+    if (this.keys.forward) this.velocity.z -= .1 * delta;
+    if (this.keys.back) this.velocity.z += .1 * delta;
+    if (this.keys.left) this.velocity.x -= .1 * delta;
+    if (this.keys.right) this. velocity.x += .1 * delta;
   }
 
   addListeners() {
