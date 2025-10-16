@@ -26,11 +26,13 @@ export class Box extends THREE.Mesh {
   model
   animations
 
-  constructor({sizes, color = 0x00ff00, position, velocity, role, modelController = null, modelScale = null}) {
-    super(
-      new THREE.BoxGeometry(sizes.width, sizes.height, sizes.depth),
+  constructor({sizes, color = 0x00ff00, position, velocity, role, modelController = null, modelScale = null, texture = null}) {
+    const geometry = new THREE.BoxGeometry(sizes.width, sizes.height, sizes.depth);
+    const material = texture ?
+      new THREE.MeshStandardMaterial({map: texture}):
       new THREE.MeshStandardMaterial({color: color, visible: role === 'ground',})
-    );
+
+    super(geometry, material);
 
     this.sizes = sizes;
     this.color = color;

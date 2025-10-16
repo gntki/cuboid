@@ -25,6 +25,7 @@ export class Controller {
   characterController: ModelController;
   enemyController: ModelController;
   enemies: THREE.Group = new THREE.Group;
+  texture
 
 
   constructor(el: HTMLCanvasElement, size) {
@@ -73,7 +74,13 @@ export class Controller {
         ...characterSettings,
         modelController: this.characterController,
       });
-    this.ground = new Box(groundSettings);
+
+    this.texture = new THREE.TextureLoader().load('src/assets/s2-texture.jpg');
+    this.texture.wrapS = THREE.RepeatWrapping;
+    this.texture.wrapT = THREE.RepeatWrapping;
+    this.texture.repeat.set(3, 15);
+
+    this.ground = new Box({...groundSettings, texture: this.texture});
 
     this.scene.add(this.ground);
     this.scene.add(this.cube);
@@ -82,7 +89,7 @@ export class Controller {
 
   createLights() {
     const ambientLight = new THREE.AmbientLight(0xffffff, .8);
-    const dirLight = new THREE.DirectionalLight(0xffffff, .7);
+    const dirLight = new THREE.DirectionalLight(0xffffff, .9);
     dirLight.position.set(0, 5, 15 );
     dirLight.target.position.set(0, 4, -10)
     dirLight.castShadow = true;
@@ -147,6 +154,7 @@ export class Controller {
 
     this.enemySpawn(this.animationId)
 
+    this.texture.offset.y += 0.02 * _delta;
     this.cube.update(this.ground, _delta);
     this.characterController.updateMixer(delta)
 
