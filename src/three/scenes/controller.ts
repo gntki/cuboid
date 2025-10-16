@@ -110,7 +110,7 @@ export class Controller {
 
 
   createRender() {
-    this.renderer = new THREE.WebGLRenderer({canvas: this.el, alpha: true});
+    this.renderer = new THREE.WebGLRenderer({canvas: this.el, alpha: true, antialias: true});
     this.renderer.setSize(this.size.w, this.size.h);
     this.renderer.shadowMap.enabled = true;
     this.renderer.render(this.scene, this.camera);

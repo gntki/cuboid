@@ -1,8 +1,8 @@
 export const characterSettings = {
   sizes: {
-    width: .5,
+    width: .4,
     height: 1,
-    depth: .7,
+    depth: .5,
   },
   color: 0x00ff00,
   position: {x: 0, y: 0.55, z: 3},
