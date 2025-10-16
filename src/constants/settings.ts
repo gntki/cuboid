@@ -1,13 +1,13 @@
 export const characterSettings = {
   sizes: {
-    width: .4,
-    height: 1.3,
+    width: .5,
+    height: 1,
     depth: .7,
   },
   color: 0x00ff00,
-  position: {x: 0, y: 0, z: 3},
-  velocity: {x: 0, y: -.1, z: 0},
-  modelScale: {x: .7, y: .7, z: .7},
+  position: {x: 0, y: 0.55, z: 3},
+  velocity: {x: 0, y: 0, z: 0},
+  modelScale: {x: .007, y: .007, z: .007},
   role: 'runner'
 }
 

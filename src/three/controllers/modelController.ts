@@ -32,7 +32,7 @@ export class ModelController {
           if (animations && animations.length > 0) {
             this.mixer = new THREE.AnimationMixer(this.scene);
             animations.forEach((clip, index) => {
-              this.animations[clip.name || `animation_${index}`] = this.mixer.clipAction(clip);
+              this.animations[`animation_${index}`] = this.mixer.clipAction(clip);
             });
           }
 

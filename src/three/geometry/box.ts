@@ -29,7 +29,7 @@ export class Box extends THREE.Mesh {
   constructor({sizes, color = 0x00ff00, position, velocity, role, modelController = null, modelScale = null}) {
     super(
       new THREE.BoxGeometry(sizes.width, sizes.height, sizes.depth),
-      new THREE.MeshStandardMaterial({color: color, visible: !modelController})
+      new THREE.MeshStandardMaterial({color: color, visible: role === 'ground',})
     );
 
     this.sizes = sizes;
@@ -72,6 +72,7 @@ export class Box extends THREE.Mesh {
 
     if(this.role === 'runner') {
       this.model = modelController.scene;
+      this.model.position.y = -.5;
     } else if(this.role === 'enemy') {
       this.model = modelController.scene.clone();
     }
@@ -90,7 +91,7 @@ export class Box extends THREE.Mesh {
 
   initAnimation() {
     if(this.role !== 'runner') return;
-    this.animations.Animation.play();
+    this.animations['animation_0'].play();
   }
 
   updateSides() {

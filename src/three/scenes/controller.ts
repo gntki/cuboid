@@ -63,7 +63,7 @@ export class Controller {
   }
 
   async createModels() {
-    this.characterController = await ModelController.create('src/models/runner/scene.gltf', true);
+    this.characterController = await ModelController.create('src/models/luoli/scene.gltf', true);
     this.enemyController = await ModelController.create('src/models/stone/scene.gltf', true);
   }
 
