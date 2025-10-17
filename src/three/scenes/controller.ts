@@ -5,6 +5,10 @@ import {Box} from "three/geometry/box.ts";
 import {characterSettings, enemySettings, groundSettings} from "@constants/settings.ts";
 import {enemySpanSpeed} from "utils/enemySpanSpeed.ts";
 import {ModelController} from "three/controllers/modelController.ts";
+import {Runner} from "three/geometry/runner.ts";
+import {Ground} from "three/geometry/ground.ts";
+import {Enemy} from "three/geometry/enemy.ts";
+import {checkCollusion} from "utils/checkCollusion.ts";
 
 
 export class Controller {
@@ -20,10 +24,10 @@ export class Controller {
   private clock: THREE.Clock = new THREE.Clock();
   private stats;
 
-  cube: Box;
-  ground: Box;
-  characterController: ModelController;
-  enemyController: ModelController;
+  runner: Runner;
+  ground: Ground;
+  runnerModelController: ModelController;
+  enemyModelController: ModelController;
   enemies: THREE.Group = new THREE.Group;
   texture
 
@@ -64,26 +68,17 @@ export class Controller {
   }
 
   async createModels() {
-    this.characterController = await ModelController.create('src/models/luoli/scene.gltf', true);
-    this.enemyController = await ModelController.create('src/models/stone/scene.gltf', true);
+    this.runnerModelController = await ModelController.create('src/models/luoli/scene.gltf', true);
+    this.enemyModelController = await ModelController.create('src/models/stone/scene.gltf', true);
   }
 
   createObjects() {
-    this.cube = new Box(
-      {
-        ...characterSettings,
-        modelController: this.characterController,
-      });
-
+    this.runner = new Runner({...characterSettings, modelController: this.runnerModelController});
     this.texture = new THREE.TextureLoader().load('src/assets/s2-texture.jpg');
-    this.texture.wrapS = THREE.RepeatWrapping;
-    this.texture.wrapT = THREE.RepeatWrapping;
-    this.texture.repeat.set(3, 15);
-
-    this.ground = new Box({...groundSettings, texture: this.texture});
+    this.ground = new Ground({...groundSettings, texture: this.texture});
 
     this.scene.add(this.ground);
-    this.scene.add(this.cube);
+    this.scene.add(this.runner);
     this.scene.add(this.enemies);
   }
 
@@ -134,13 +129,13 @@ export class Controller {
 
     if (this.animationId % mn === 0) {
       this.enemies.add(
-        new Box({
+        new Enemy({
           ...enemySettings,
           position: {
             ...enemySettings.position,
             x: Math.random() * (-4.5 - 4.5) + 4.5
           },
-          modelController: this.enemyController,
+          modelController: this.enemyModelController,
         })
       )
     }
@@ -154,15 +149,15 @@ export class Controller {
 
     this.enemySpawn(this.animationId)
 
-    this.texture.offset.y += 0.02 * _delta;
-    this.cube.update(this.ground, _delta);
-    this.characterController.updateMixer(delta)
+    this.runner.update(this.ground, _delta);
+    this.runnerModelController.updateMixer(delta)
+    this.ground.update(_delta)
 
     this.enemies.children.forEach(el => {
       if (el.position.y < -10) this.enemies.remove(el)
       el?.update(this.ground, _delta)
 
-      if (this.cube.checkCollusion(this.cube, el)) {
+      if (checkCollusion(this.runner, el)) {
         cancelAnimationFrame(this.animationId)
       }
     })
