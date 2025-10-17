@@ -3,10 +3,10 @@
 //     MOBILE =  "320px"
 // }
 //
-// export enum COLORS {
-//     WHITE = "#FFFFFF",
-//     BLACK = "#000000"
-// }
+export enum COLORS {
+    WHITE = "#FFFFFF",
+    BLACK = "#000000"
+}
 
 import * as THREE from "three";
 

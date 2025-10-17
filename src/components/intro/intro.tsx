@@ -1,6 +1,7 @@
 import * as S from './intro.style.ts'
 import {useLayoutEffect, useRef} from "react";
 import {Controller} from "three/scenes/controller.ts";
+import Start from "@components/start/start.tsx";
 
 
 export const Intro = () => {
@@ -16,6 +17,7 @@ export const Intro = () => {
   return (
     <S.IntroStyled>
       <S.Canvas ref={sceneRef}/>
+      {/*<Start/>*/}
     </S.IntroStyled>
   )
 }

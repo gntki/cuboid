@@ -1,3 +1,11 @@
+@font-face {
+  font-family: 'Inter';
+  font-weight: 400;
+  font-style: normal;
+  src:
+    url('./fonts/Rubik.woff2') format('woff2');
+  font-display: swap;
+}
 
 a {
   font-weight: 500;
@@ -10,7 +18,7 @@ a:hover {
 }
 
 html {
-  font-size: 0.053vw;
+  font-size: 0.0521vw;
   @media screen and (max-width: 999px) {
     font-size: 0.313vw;
   }
@@ -21,6 +29,7 @@ body {
   display: flex;
   min-height: 100vh;
   font-size: 16rem;
+  font-family: 'Rubik', 'Arial', sans-serif;
 }
 
 
