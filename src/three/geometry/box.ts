@@ -9,12 +9,12 @@ export class Box extends THREE.Mesh {
   sizes;
   color: number
   //sides
-  top: number | null = null;
-  bottom: number | null = null;
-  left: number | null = null;
-  right: number | null = null;
-  front: number | null = null;
-  back: number | null = null;
+  top: number = 0;
+  bottom: number = 0;
+  left: number = 0;
+  right: number = 0;
+  front: number = 0;
+  back: number = 0;
   //settings
   velocity = {x: 0, y: 0, z: 0}
   gravity: number = -0.01;

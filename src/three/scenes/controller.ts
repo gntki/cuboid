@@ -1,7 +1,7 @@
 import * as THREE from 'three'
-import {OrbitControls} from "three/examples/jsm/controls/OrbitControls";
+// @ts-ignore
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import Stats from 'three/examples/jsm/libs/stats.module.js'
-import {Box} from "three/geometry/box.ts";
 import {characterSettings, enemySettings, groundSettings} from "@constants/settings.ts";
 import {enemySpanSpeed} from "utils/enemySpanSpeed.ts";
 import {ModelController} from "three/controllers/modelController.ts";
@@ -17,22 +17,22 @@ export class Controller {
   private el: HTMLCanvasElement;
   private size: { w: number, h: number } = {w: 0, h: 0};
   private scene: THREE.Scene;
-  private camera: THREE.PerspectiveCamera;
-  private renderer: THREE.WebGLRenderer;
+  private camera!: THREE.PerspectiveCamera;
+  private renderer!: THREE.WebGLRenderer;
   private orbitControls: OrbitControls;
 
   private clock: THREE.Clock = new THREE.Clock();
-  private stats;
+  private stats: Stats = new Stats();
 
-  runner: Runner;
-  ground: Ground;
-  runnerModelController: ModelController;
-  enemyModelController: ModelController;
-  enemies: THREE.Group = new THREE.Group;
-  texture
+  private runner!: Runner;
+  private ground!: Ground;
+  private runnerModelController!: ModelController;
+  private enemyModelController!: ModelController;
+  private enemies: THREE.Group = new THREE.Group;
+  private texture: THREE.Texture | null = null;
 
 
-  constructor(el: HTMLCanvasElement, size) {
+  constructor(el: HTMLCanvasElement, size: {w: number, h: number}) {
     this.el = el;
     this.size.w = size.w;
     this.size.h = size.h;
@@ -112,7 +112,6 @@ export class Controller {
   }
 
   createStats() {
-    this.stats = new Stats();
     this.stats.showPanel(0);
     document.body.appendChild(this.stats.dom)
   }
@@ -124,7 +123,7 @@ export class Controller {
     this.orbitControls.enableDamping = true;
   }
 
-  enemySpawn(id) {
+  enemySpawn(id: number) {
     const mn = enemySpanSpeed(id)
 
     if (this.animationId % mn === 0) {
@@ -155,9 +154,10 @@ export class Controller {
 
     this.enemies.children.forEach(el => {
       if (el.position.y < -10) this.enemies.remove(el)
-      el?.update(this.ground, _delta)
+      const enemy = el as Enemy;
+      enemy?.update(this.ground, _delta)
 
-      if (checkCollusion(this.runner, el)) {
+      if (checkCollusion(this.runner, enemy)) {
         cancelAnimationFrame(this.animationId)
       }
     })
