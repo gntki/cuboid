@@ -4,6 +4,10 @@ import tsconfigPaths from "vite-tsconfig-paths";
 
 export default defineConfig({
     base: process.env.NODE_ENV === 'production' ? '/cuboid/' : './',
+    build: {
+        outDir: 'dist',
+        assetsDir: 'assets'
+    },
     plugins: [
         react({
             babel: {
