@@ -29,6 +29,7 @@ export class Box extends THREE.Mesh {
     this.initPosition(position);
     this.initVelocity(velocity);
     this.updateSides();
+    console.log(new THREE.Mesh)
   }
 
   initPosition(position: XYZType) {

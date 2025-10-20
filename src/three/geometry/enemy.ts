@@ -22,7 +22,7 @@ export class Enemy extends Box {
   }
 
   addModel(modelController: ModelController, modelScale: XYZType) {
-    if (!modelController || !modelController.scene) return;
+    if (!modelController.scene) return;
 
     this.model = modelController.scene.clone();
 

@@ -1,5 +1,9 @@
 import * as THREE from 'three'
 import {Box} from "three/geometry/box.ts";
+import type {EnemyProps} from "three/geometry/types.ts";
+import type {ModelController} from "three/controllers/modelController.ts";
+import type {XYZType} from "@constants/settings.ts";
+import type {Ground} from "three/geometry/ground.ts";
 
 export class Runner extends Box {
   keys = {
@@ -10,46 +14,48 @@ export class Runner extends Box {
     jump: false
   }
 
-  model
-  animations
+  model: THREE.Object3D | null = null;
+  animationList : {[key: string]: THREE.AnimationAction} = {}
 
-  constructor({sizes, color = 0x00ff00, position, velocity, modelController = null, modelScale = null}) {
+
+  constructor({sizes, color = 0x00ff00, position, velocity, modelController = null, modelScale = null}: EnemyProps) {
     const geometry = new THREE.BoxGeometry(sizes.width, sizes.height, sizes.depth);
     const material = new THREE.MeshStandardMaterial({color: color, visible: false})
 
     super({geometry, material, sizes, color, position, velocity});
 
-
-    this.addModel(modelController, modelScale);
+    if(modelController && modelScale) {
+      this.addModel(modelController, modelScale);
+    }
 
     this.update = this.update.bind(this);
     this.addListeners();
   }
 
 
-  addModel(modelController, modelScale) {
-    if(!modelController) return;
+  addModel(modelController: ModelController, modelScale: XYZType) {
+    if (!modelController.scene) return;
 
     this.model = modelController.scene;
     this.model.position.y = -.5;
 
-    this.animations = modelController.animations
+    this.animationList = modelController.animations
 
     const {x,y,z} = modelScale;
     this.model.scale.set(x, y, z);
     this.model.rotation.y = Math.PI;
     this.add(this.model);
 
-    if(this.animations) {
+    if(this.animationList) {
       this.initAnimation()
     }
   }
 
   initAnimation() {
-    this.animations['animation_0'].play();
+    this.animationList['animation_0'].play();
   }
 
-  update(ground, delta) {
+  update(ground: Ground, delta: number) {
     this.updateSides();
     this.movementHandler(delta)
 
@@ -59,7 +65,7 @@ export class Runner extends Box {
     this.applyGravity(ground);
   }
 
-  keyCodeHandler(code, value) {
+  keyCodeHandler(code: string, value: boolean) {
     switch (true) {
       case (code === "KeyW"):
         this.keys.forward = value;
@@ -76,7 +82,7 @@ export class Runner extends Box {
     }
   }
 
-  movementHandler(delta) {
+  movementHandler(delta: number) {
     this.velocity.x = 0;
     this.velocity.z = 0;
 

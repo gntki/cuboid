@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {SizesTypes, XYZType} from "@constants/settings.ts";
+import type {SizesTypes, XYZType} from "@constants/settings.ts";
 import {ModelController} from "three/controllers/modelController.ts";
 
 export interface BoxProps {
