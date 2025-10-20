@@ -1,10 +1,9 @@
 import * as THREE from 'three'
-import {GLTFLoader} from "three/examples/jsm/loaders/GLTFLoader";
-
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 export class ModelController {
-  scene: THREE.Group;
-  mixer: THREE.AnimationMixer;
+  scene: THREE.Group | null = null;
+  mixer: THREE.AnimationMixer | null = null;
   animations: { [key: string]: THREE.AnimationAction } = {};
 
 
@@ -19,7 +18,7 @@ export class ModelController {
   }
 
 
-  async initModel(source, shadows) {
+  async initModel(source: string, shadows: boolean): Promise<void> {
     const loader = new GLTFLoader();
 
     return new Promise((resolve, reject) => {
@@ -32,7 +31,7 @@ export class ModelController {
           if (animations && animations.length > 0) {
             this.mixer = new THREE.AnimationMixer(this.scene);
             animations.forEach((clip, index) => {
-              this.animations[`animation_${index}`] = this.mixer.clipAction(clip);
+              this.animations[`animation_${index}`] = this.mixer!.clipAction(clip);
             });
           }
 
@@ -60,7 +59,7 @@ export class ModelController {
     if (!this.scene) return;
 
     this.scene.traverse((child) => {
-      if (child.isMesh) {
+      if ((child as THREE.Mesh).isMesh) {
         child.castShadow = true;
         child.receiveShadow = true;
 
@@ -72,7 +71,8 @@ export class ModelController {
   }
 
 
-  updateMixer(delta) {
+  updateMixer(delta: number) {
+    if(!this.mixer) return;
     this.mixer.update(delta);
   }
 
