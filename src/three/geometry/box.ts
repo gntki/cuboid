@@ -1,23 +1,26 @@
 import * as THREE from 'three'
 import {checkCollusion} from "utils/checkCollusion.ts";
+import type {BoxProps} from "three/geometry/types.ts";
+import type {XYZType} from "@constants/settings.ts";
+import type {Ground} from "three/geometry/ground.ts";
 
 export class Box extends THREE.Mesh {
   //main
   sizes;
   color: number
   //sides
-  top: number;
-  bottom: number;
-  left: number;
-  right: number;
-  front: number
-  back: number
+  top: number | null = null;
+  bottom: number | null = null;
+  left: number | null = null;
+  right: number | null = null;
+  front: number | null = null;
+  back: number | null = null;
   //settings
   velocity = {x: 0, y: 0, z: 0}
   gravity: number = -0.01;
 
 
-  constructor({geometry, material, sizes, color = 0x00ff00, position, velocity}) {
+  constructor({geometry, material, sizes, color = 0x00ff00, position, velocity}: BoxProps) {
     super(geometry, material);
 
     this.sizes = sizes;
@@ -28,12 +31,12 @@ export class Box extends THREE.Mesh {
     this.updateSides();
   }
 
-  initPosition(position) {
+  initPosition(position: XYZType) {
     const {x, y, z} = position;
     this.position.set(x, y, z)
   }
 
-  initVelocity(velocity) {
+  initVelocity(velocity: XYZType) {
     const {x, y, z} = velocity;
     this.velocity.x = x;
     this.velocity.y = y;
@@ -54,7 +57,7 @@ export class Box extends THREE.Mesh {
     this.back = z + depth / 2;
   }
 
-  applyGravity(ground) {
+  applyGravity(ground: Ground) {
     this.velocity.y += this.gravity;
 
     if (checkCollusion(this, ground)) {

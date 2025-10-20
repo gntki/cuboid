@@ -1,3 +1,17 @@
+export type SizesTypes = {
+  width: number,
+  height: number,
+  depth: number,
+}
+
+export type XYZType = {
+  x: number,
+  y: number,
+  z: number,
+}
+
+
+
 export const characterSettings = {
   sizes: {
     width: .4,
