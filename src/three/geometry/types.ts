@@ -19,3 +19,11 @@ export interface EnemyProps {
   modelController: ModelController | null
   modelScale: XYZType | null
 }
+
+export interface GroundProps {
+  sizes: SizesTypes
+  color: number
+  position: XYZType
+  velocity: XYZType
+  texture: THREE.Texture | null
+}
