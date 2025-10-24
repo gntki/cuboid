@@ -75,7 +75,7 @@ export class Controller {
 
   createObjects() {
     this.runner = new Runner({...characterSettings, modelController: this.runnerModelController});
-    this.texture = new THREE.TextureLoader().load('src/assets/s2-texture.jpg');
+    this.texture = new THREE.TextureLoader().load(baseurl + 'textures/s2-texture.jpg');
     this.ground = new Ground({...groundSettings, texture: this.texture});
 
     this.scene.add(this.ground);
