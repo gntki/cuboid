@@ -68,8 +68,8 @@ export class Controller {
   }
 
   async createModels() {
-    this.runnerModelController = await ModelController.create('src/models/luoli/scene.gltf', true);
-    this.enemyModelController = await ModelController.create('src/models/stone/scene.gltf', true);
+    this.runnerModelController = await ModelController.create('/models/luoli/scene.gltf', true);
+    this.enemyModelController = await ModelController.create('/models/stone/scene.gltf', true);
   }
 
   createObjects() {
