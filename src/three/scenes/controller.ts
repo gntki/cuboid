@@ -10,6 +10,7 @@ import {Ground} from "three/geometry/ground.ts";
 import {Enemy} from "three/geometry/enemy.ts";
 import {checkCollusion} from "utils/checkCollusion.ts";
 
+const baseurl = import.meta.env.BASE_URL;
 
 export class Controller {
   private animationId: number = 0;
@@ -68,8 +69,8 @@ export class Controller {
   }
 
   async createModels() {
-    this.runnerModelController = await ModelController.create('/models/luoli/scene.gltf', true);
-    this.enemyModelController = await ModelController.create('/models/stone/scene.gltf', true);
+    this.runnerModelController = await ModelController.create(baseurl + '/models/luoli/scene.gltf', true);
+    this.enemyModelController = await ModelController.create(baseurl + '/models/stone/scene.gltf', true);
   }
 
   createObjects() {
