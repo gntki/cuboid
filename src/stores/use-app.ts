@@ -1,13 +1,19 @@
 import { create } from 'zustand'
 
-type Page = 'start' | 'end'
+type Page = 'start' | 'game' | 'end'
 
 interface Store {
   page: Page
-  setStage: (page: Page) => void
+  setPage: (page: Page) => void
+
+  gameStart: boolean
+  setGameStart: (v: boolean) => void
 }
 
 export const useAppStore = create<Store>((set) => ({
-  page: 'end',
-  setStage: (page: Page) => set({ page }),
+  page: 'start',
+  setPage: (page: Page) => set({ page }),
+
+  gameStart: false,
+  setGameStart: (gameStart: boolean) => set({ gameStart }),
 }))
