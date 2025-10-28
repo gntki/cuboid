@@ -1,14 +1,11 @@
 import styled from "styled-components";
 
-import bg from '@images/bg.jpg'
 
-export const IntroStyled = styled.section`
+export const GameStyled = styled.section`
     display: flex;
-    flex-direction: column-reverse;
     position: relative;
     width: 100%;
-    min-height: 100svh;
-    background: url(${bg}) no-repeat center/cover;
+    min-height: 100%;
 `
 
 export const Canvas = styled.canvas`
