@@ -1,9 +1,8 @@
 import styled from "styled-components";
 
-import bg from '@images/bg.jpg'
 import {COLORS} from "@constants/constants.ts";
 
-export const Start = styled.section`
+export const End = styled.section`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -18,7 +17,7 @@ export const Content = styled.div`
   flex-direction: column;
   align-items: center;
   padding: 25rem 25rem 30rem;
-  width: 600rem;
+  width: 700rem;
   color: ${COLORS.WHITE};
   text-align: center;
   background: rgba(0,0,0,.5);
@@ -33,19 +32,10 @@ export const Title = styled.h1`
 `
 
 export const Text = styled.p`
-  font-size: 24rem;
-  line-height: 1.4;
-  white-space: pre-line;
-`
-export const Control = styled(Text)`
-  font-size: 20rem;
-  margin: 20rem 0 15rem;
-`
-
-export const Note = styled(Text)`
   margin: 0 0 24rem;
   font-size: 24rem;
-  text-align: center;
   line-height: 1.4;
   white-space: pre-line;
 `
+
+

@@ -1,18 +1,25 @@
 import * as S from './main-page.style.ts'
-import {Game, Start} from "@components";
+import {End, Game, Start} from "@components";
+import {useAppStore} from "stores";
+import type {ReactNode} from "react";
+import {CSSTransition, SwitchTransition} from "react-transition-group";
 
 
 export const MainPage = () => {
-  const page = 'start'
+  const {page} = useAppStore();
 
   const pages = {
-    start: <Start/>
+    start: <Start/>,
+    end: <End/>
   }
-
 
   return (
     <S.MainPageStyle>
-      {/*{pages[page]}*/}
+      <SwitchTransition>
+        <CSSTransition>
+          <S.Subpage>{pages[page] as ReactNode}</S.Subpage>
+        </CSSTransition>
+      </SwitchTransition>
       <Game/>
     </S.MainPageStyle>
   )

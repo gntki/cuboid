@@ -15,15 +15,18 @@
     "lil-gui": "^0.20.0",
     "react": "^19.1.0",
     "react-dom": "^19.1.0",
+    "react-transition-group": "^4.4.5",
     "styled-components": "^6.1.19",
     "three": "^0.180.0",
-    "vite-tsconfig-paths": "^5.1.4"
+    "vite-tsconfig-paths": "^5.1.4",
+    "zustand": "^5.0.8"
   },
   "devDependencies": {
     "@eslint/js": "^9.25.0",
     "@types/node": "^24.0.3",
     "@types/react": "^19.1.2",
     "@types/react-dom": "^19.1.2",
+    "@types/react-transition-group": "^4.4.6",
     "@types/three": "^0.180.0",
     "@vitejs/plugin-react": "^4.4.1",
     "babel-plugin-styled-components": "^2.1.4",

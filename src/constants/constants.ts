@@ -7,7 +7,8 @@ import * as THREE from "three";
 //
 export const COLORS = {
     WHITE: "#FFFFFF",
-    BLACK: "#000000"
+    BLACK: "#000000",
+    VIOLET: "#5c10b4"
 }
 
 

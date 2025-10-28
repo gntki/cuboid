@@ -1,5 +1,6 @@
 import * as S from './start.style.ts'
 import parse from 'html-react-parser'
+import {Button} from "@ui-kit";
 
 export const Start = () => {
 
@@ -11,6 +12,7 @@ export const Start = () => {
         <S.Text>{parse("Вперёд, к&nbsp;приключениям! Твой герой уже бежит, но&nbsp;горные обвалы не&nbsp;дремлют&nbsp;&mdash; гигантские валуны несутся навстречу!")}</S.Text>
         <S.Control>{parse("Управление:\nW&nbsp;&mdash; Давай вперёд\nA/D&nbsp;&mdash; Сместиться в&nbsp;сторону\nS&nbsp;&mdash; Шаг назад")}</S.Control>
         <S.Note>Прояви ловкость и&nbsp;стань легендой ущелья!</S.Note>
+        <Button>Погнали</Button>
       </S.Content>
     </S.Start>
   )
