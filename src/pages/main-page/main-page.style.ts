@@ -9,28 +9,3 @@ export const MainPageStyle = styled.div`
   background: url(${bg}) no-repeat center/cover;
   overflow: hidden;
 `
-
-export const Subpage = styled.div`
-  position: absolute;
-  top: 0;
-  left: 0;
-  bottom: 0;
-  right: 0;
-  z-index: 1;
-  
-  &.enter {
-    opacity: 0;
-  }
-  
-  &.enter-active,
-  &.enter-done,
-  &.exit {
-    opacity: 1;
-    transition: .3s ease-in-out;
-  }
-  
-  &.exit-active {
-    opacity: 0;
-    transition: .3s ease-in-out;
-  }
-`

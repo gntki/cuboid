@@ -1,17 +1,20 @@
 import * as S from './game.style.ts'
-import {useLayoutEffect, useRef} from "react";
+import {useEffect, useRef} from "react";
 import {Controller} from "three/scenes/controller.ts";
 
 
 export const Game = () => {
   const sceneRef = useRef<HTMLCanvasElement | null>(null);
 
-  useLayoutEffect(() => {
+
+  useEffect(() => {
     const size = {w: window?.innerWidth, h: window.innerHeight};
 
-    if(sceneRef?.current)
+    if(sceneRef?.current) {
       new Controller(sceneRef.current, size);
-  }, [sceneRef.current, window]);
+    }
+
+  }, [sceneRef.current]);
 
   return (
     <S.GameStyled>
