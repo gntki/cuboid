@@ -17,7 +17,7 @@ export const Game = () => {
     if(isGameStart) {
       gameRef.current = new Controller(sceneRef.current, ()=> setGameStart(false), size);
       gameRef.current?.startGame();
-    } else if(!isGameStart && gameRef.current?.animationId > 0) {
+    } else if(!isGameStart && gameRef?.current?.animationId > 0) {
       gameRef.current?.destroy();
       gameRef.current = null;
       setPage('end');

@@ -1,6 +1,5 @@
 import styled from "styled-components";
 
-import bg from '@images/bg.jpg'
 import {COLORS} from "@constants/constants.ts";
 
 export const Start = styled.div`
