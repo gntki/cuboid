@@ -1,7 +1,7 @@
-import styled from "styled-components";
+import styled, {css} from "styled-components";
 
 
-export const MainStyled = styled.section`
+export const MainStyled = styled.section<{$isGame: boolean}>`
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -11,14 +11,33 @@ export const MainStyled = styled.section`
   left: 0;
   width: 100%;
   min-height: 100%;
+  z-index: 1;
+  
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(11px);
+    opacity: 1;
+    transition: .3s ease-in-out;
+  }
+  
+  ${({$isGame}) => $isGame && css`
+    &:after {
+      opacity: 0;
+    }
+  `}
 `
 
 export const Subpage = styled.div`
   position: absolute;
   top: 0;
   left: 0;
-  bottom: 0;
-  right: 0;
+  width: 100%;
+  height: 100%;
   z-index: 1;
   
   &.enter {

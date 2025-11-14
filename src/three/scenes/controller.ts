@@ -13,7 +13,9 @@ import {checkCollusion} from "utils/checkCollusion.ts";
 const baseurl = import.meta.env.BASE_URL;
 
 export class Controller {
-  private animationId: number = 0;
+  public animationId: number = 0;
+  private isGameStart: boolean = false;
+  private stopGame: () => void;
 
   private el: HTMLCanvasElement;
   private size: { w: number, h: number } = {w: 0, h: 0};
@@ -33,13 +35,16 @@ export class Controller {
   private texture: THREE.Texture | null = null;
 
 
-  constructor(el: HTMLCanvasElement, size: {w: number, h: number}) {
+  constructor(el: HTMLCanvasElement, stopGame: () => void, size: {w: number, h: number}) {
     this.el = el;
+    this.stopGame = stopGame;
     this.size.w = size.w;
     this.size.h = size.h;
     this.scene = new THREE.Scene();
 
+    this.startGame = this.startGame.bind(this);
     this.tick = this.tick.bind(this);
+    this.destroy = this.destroy.bind(this);
 
     this.init();
   }
@@ -125,6 +130,8 @@ export class Controller {
   }
 
   enemySpawn(id: number) {
+    if(!this.isGameStart) return;
+
     const mn = enemySpanSpeed(id)
 
     if (this.animationId % mn === 0) {
@@ -159,36 +166,63 @@ export class Controller {
       enemy?.update(this.ground, _delta)
 
       if (checkCollusion(this.runner, enemy)) {
-        cancelAnimationFrame(this.animationId)
+        this.isGameStart = false;
+        this.stopGame();
       }
     })
   }
 
   tick() {
-    this.animationId = requestAnimationFrame(this.tick);
     this.renderer.render(this.scene, this.camera);
 
     this.stats.begin();
-
     this.sceneUpdate()
-
     this.stats.end();
+
+    if(this.isGameStart) {
+      this.animationId = requestAnimationFrame(this.tick);
+    }
   }
 
+  startGame() {
+    console.log("МЕНЯ ВЫЗВАЛИ!!!!!!!!!!!")
+    this.isGameStart = true;
+    this.animationId = requestAnimationFrame(this.tick);
+  }
+
+  destroy() {
+    console.log('ДЕСТРОЙ ЕСТЬ')
+    console.log('this.enemies 1', this.enemies)
+    this.animationId = 0;
+    this.enemies.clear();
+    this.removeResizeListener();
+    this.renderer.dispose();
+    cancelAnimationFrame(this.animationId)
+    console.log('this.enemies 2', this.enemies)
+  }
+
+
+
+  resizeHandler () {
+    this.size.w = window.innerWidth;
+    this.size.h = window.innerHeight
+
+    this.camera.aspect = this.size.w / this.size.h;
+    this.camera.updateProjectionMatrix();
+
+    this.renderer.setSize(this.size.w, this.size.h);
+    // renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+    this.renderer.render(this.scene, this.camera);
+  }
 
   addResizeListener() {
-    window.addEventListener('resize', () => {
-      this.size.w = window.innerWidth;
-      this.size.h = window.innerHeight
-
-      this.camera.aspect = this.size.w / this.size.h;
-      this.camera.updateProjectionMatrix();
-
-      this.renderer.setSize(this.size.w, this.size.h);
-      // renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-      this.renderer.render(this.scene, this.camera);
-    })
+    window.addEventListener('resize', this.resizeHandler)
   }
+
+  removeResizeListener() {
+    window.removeEventListener('resize', this.resizeHandler)
+  }
+
 
 }
 

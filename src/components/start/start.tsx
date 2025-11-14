@@ -14,8 +14,8 @@ export const Start = () => {
         <S.Control>{parse("Управление:\nW&nbsp;&mdash; Давай вперёд\nA/D&nbsp;&mdash; Сместиться в&nbsp;сторону\nS&nbsp;&mdash; Шаг назад")}</S.Control>
         <S.Note>Прояви ловкость и&nbsp;стань легендой ущелья!</S.Note>
         <Button onClick={()=> {
-          setPage('game');
           setGameStart(true);
+          setPage('game');
         }}>Погнали</Button>
       </S.Content>
     </S.Start>

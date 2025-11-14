@@ -14,7 +14,7 @@ export const Main = () => {
   }
 
   return (
-    <MainStyled>
+    <MainStyled $isGame={page==='game'}>
       <SwitchTransition>
         <CSSTransition key={page} timeout={300}>
           <Subpage>{pages[page] as ReactNode}</Subpage>

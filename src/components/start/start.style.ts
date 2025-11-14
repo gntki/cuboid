@@ -3,7 +3,7 @@ import styled from "styled-components";
 import bg from '@images/bg.jpg'
 import {COLORS} from "@constants/constants.ts";
 
-export const Start = styled.section`
+export const Start = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
