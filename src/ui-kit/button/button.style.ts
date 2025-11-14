@@ -12,6 +12,7 @@ export const Button = styled.button`
   height: 54rem;
   border-radius: 12rem;
   font-size: 33rem;
+  color: ${COLORS.BLACK};
   font-variation-settings: 'wght' 500;
   letter-spacing: -.8rem;
   background: rgba(255, 255, 255, .9);
