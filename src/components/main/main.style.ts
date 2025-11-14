@@ -12,6 +12,7 @@ export const MainStyled = styled.section<{$isGame: boolean}>`
   width: 100%;
   min-height: 100%;
   z-index: 1;
+  pointer-events: none;
   
   &:after {
     content: '';

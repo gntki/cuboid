@@ -10,6 +10,7 @@ export const Start = styled.div`
   position: relative;
   width: 100%;
   min-height: 100%;
+  pointer-events: all;
 `
 
 export const Content = styled.div`
