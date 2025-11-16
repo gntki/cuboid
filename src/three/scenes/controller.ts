@@ -68,7 +68,11 @@ export class Controller {
 
     this.tick();
 
-    this.resizeController = new ResizeController({...this});
+    this.resizeController = new ResizeController({
+      size: this.size,
+      scene: this.scene,
+      camera: this.camera,
+      renderer: this.renderer});
     this.resizeController.addResizeListener();
   }
 
