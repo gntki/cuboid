@@ -13,7 +13,9 @@ import {checkCollusion} from "utils/checkCollusion.ts";
 const baseurl = import.meta.env.BASE_URL;
 
 export class Controller {
-  public animationId: number = 0;
+  private animationId: number = 0;
+  private frameId: number = 0;
+
   private isGameStart: boolean = false;
   private stopGame: () => void;
 
@@ -140,7 +142,7 @@ export class Controller {
 
     const mn = enemySpanSpeed(id)
 
-    if (this.animationId % mn === 0) {
+    if (id % mn === 0) {
       this.enemies.add(
         new Enemy({
           ...enemySettings,
@@ -160,7 +162,7 @@ export class Controller {
 
     this.orbitControls.update();
 
-    this.enemySpawn(this.animationId)
+    this.enemySpawn(this.frameId)
 
     this.runner.update(this.ground, _delta);
     this.runnerModelController.updateMixer(delta)
@@ -179,6 +181,8 @@ export class Controller {
   }
 
   tick() {
+    if (!this.renderer) return;
+
     this.renderer.render(this.scene, this.camera);
 
     this.stats.begin();
@@ -186,25 +190,24 @@ export class Controller {
     this.stats.end();
 
     if (this.isGameStart) {
+      this.frameId++;
       this.animationId = requestAnimationFrame(this.tick);
     }
   }
 
   startGame() {
-    console.log("МЕНЯ ВЫЗВАЛИ!!!!!!!!!!!")
+    console.log("___START_GAME___")
     this.isGameStart = true;
     this.animationId = requestAnimationFrame(this.tick);
   }
 
   destroy() {
-    console.log('ДЕСТРОЙ ЕСТЬ')
-    console.log('this.enemies 1', this.enemies)
-    this.animationId = 0;
+    console.log('___DESTROY___')
+    cancelAnimationFrame(this.animationId)
+    this.frameId = 0;
     this.enemies.clear();
     this.removeResizeListener();
     this.renderer.dispose();
-    cancelAnimationFrame(this.animationId)
-    console.log('this.enemies 2', this.enemies)
   }
 
 

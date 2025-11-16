@@ -5,25 +5,28 @@ import {useAppStore} from "stores";
 
 
 export const Game = () => {
-  const {isGameStart, setGameStart, setPage} = useAppStore()
+  const {page, isGameStart, setGameStart, setPage} = useAppStore()
   const sceneRef = useRef<HTMLCanvasElement | null>(null);
   const gameRef = useRef<Controller | null>(null);
 
   useEffect(() => {
-    if(!sceneRef?.current) return;
-
+    if(page!=='start' || !sceneRef?.current) return;
     const size = {w: window?.innerWidth, h: window.innerHeight};
+    gameRef.current = new Controller(sceneRef.current, ()=> setGameStart(false), size);
+  }, [page]);
+
+  useEffect(() => {
+    if(!gameRef.current) return;
 
     if(isGameStart) {
-      gameRef.current = new Controller(sceneRef.current, ()=> setGameStart(false), size);
       gameRef.current?.startGame();
-    } else if(!isGameStart && gameRef?.current?.animationId && gameRef?.current?.animationId > 0) {
+    } else if(!isGameStart && page==='game') {
+      setPage('end');
       gameRef.current?.destroy();
       gameRef.current = null;
-      setPage('end');
     }
 
-  }, [sceneRef?.current, isGameStart]);
+  }, [gameRef?.current, isGameStart, page]);
 
 
   return (
