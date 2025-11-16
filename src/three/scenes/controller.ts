@@ -29,7 +29,7 @@ export class Controller {
 
   private clock: THREE.Clock = new THREE.Clock();
   private stats: Stats = new Stats();
-  private resizeController: ResizeController;
+  private resizeController!: ResizeController;
 
   private runner!: Runner;
   private ground!: Ground;
@@ -68,7 +68,8 @@ export class Controller {
 
     this.tick();
 
-    this.resizeController = new ResizeController({...this})
+    this.resizeController = new ResizeController({...this});
+    this.resizeController.addResizeListener();
   }
 
 
