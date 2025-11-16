@@ -10,7 +10,7 @@ export const End = styled.section`
   position: relative;
   width: 100%;
   min-height: 100%;
-  //pointer-events: all;
+  pointer-events: all;
 `
 
 export const Content = styled.div`
