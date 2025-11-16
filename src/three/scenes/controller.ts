@@ -101,9 +101,14 @@ export class Controller {
   createLights() {
     const ambientLight = new THREE.AmbientLight(0xffffff, .8);
     const dirLight = new THREE.DirectionalLight(0xffffff, .9);
-    dirLight.position.set(0, 5, 15);
-    dirLight.target.position.set(0, 4, -10)
+    dirLight.position.set(0, 10, 5);
+    dirLight.target.position.set(0, 0,-30)
     dirLight.castShadow = true;
+
+    dirLight.shadow.camera.left = -5;
+    dirLight.shadow.camera.right = 5;
+    dirLight.shadow.camera.top = 5;
+    dirLight.shadow.camera.bottom = -10;
 
     this.scene.add(ambientLight);
     // const shadowHelper = new THREE.CameraHelper(dirLight.shadow.camera);
