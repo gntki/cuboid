@@ -73,6 +73,7 @@ export class Controller {
       scene: this.scene,
       camera: this.camera,
       renderer: this.renderer});
+
     this.resizeController.addResizeListener();
   }
 
