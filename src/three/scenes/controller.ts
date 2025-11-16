@@ -157,7 +157,9 @@ export class Controller {
   }
 
   sceneUpdate() {
-    const delta = this.clock.getDelta();
+    let delta = this.clock.getDelta();
+    //Ограничение дельты в случае потери фокуса
+    delta = Math.min(delta, 1/30);
     const _delta = delta * 42;
 
     this.orbitControls.update();
@@ -188,6 +190,8 @@ export class Controller {
     this.stats.begin();
     this.sceneUpdate()
     this.stats.end();
+    console.log('this.frameId', this.frameId)
+    console.log('this.animationId', this.animationId)
 
     if (this.isGameStart) {
       this.frameId++;
