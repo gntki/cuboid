@@ -9,6 +9,7 @@ import {Runner} from "three/geometry/runner.ts";
 import {Ground} from "three/geometry/ground.ts";
 import {Enemy} from "three/geometry/enemy.ts";
 import {checkCollusion} from "utils/checkCollusion.ts";
+import {ResizeController} from "three/controllers/resizeController/resizeController.ts";
 
 const baseurl = import.meta.env.BASE_URL;
 
@@ -28,6 +29,7 @@ export class Controller {
 
   private clock: THREE.Clock = new THREE.Clock();
   private stats: Stats = new Stats();
+  private resizeController: ResizeController;
 
   private runner!: Runner;
   private ground!: Ground;
@@ -66,7 +68,7 @@ export class Controller {
 
     this.tick();
 
-    this.addResizeListener();
+    this.resizeController = new ResizeController({...this})
   }
 
 
@@ -190,8 +192,6 @@ export class Controller {
     this.stats.begin();
     this.sceneUpdate()
     this.stats.end();
-    console.log('this.frameId', this.frameId)
-    console.log('this.animationId', this.animationId)
 
     if (this.isGameStart) {
       this.frameId++;
@@ -210,30 +210,10 @@ export class Controller {
     cancelAnimationFrame(this.animationId)
     this.frameId = 0;
     this.enemies.clear();
-    this.removeResizeListener();
+    this.resizeController.removeResizeListener();
     this.renderer.dispose();
   }
 
-
-  resizeHandler() {
-    this.size.w = window.innerWidth;
-    this.size.h = window.innerHeight
-
-    this.camera.aspect = this.size.w / this.size.h;
-    this.camera.updateProjectionMatrix();
-
-    this.renderer.setSize(this.size.w, this.size.h);
-    // renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
-    this.renderer.render(this.scene, this.camera);
-  }
-
-  addResizeListener() {
-    window.addEventListener('resize', this.resizeHandler)
-  }
-
-  removeResizeListener() {
-    window.removeEventListener('resize', this.resizeHandler)
-  }
 
 
 }
