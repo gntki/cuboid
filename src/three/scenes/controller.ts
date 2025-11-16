@@ -1,6 +1,6 @@
 import * as THREE from 'three'
 // @ts-ignore
-import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import {OrbitControls} from 'three/examples/jsm/controls/OrbitControls';
 import Stats from 'three/examples/jsm/libs/stats.module.js'
 import {characterSettings, enemySettings, groundSettings} from "@constants/settings.ts";
 import {enemySpanSpeed} from "utils/enemySpanSpeed.ts";
@@ -35,7 +35,7 @@ export class Controller {
   private texture: THREE.Texture | null = null;
 
 
-  constructor(el: HTMLCanvasElement, stopGame: () => void, size: {w: number, h: number}) {
+  constructor(el: HTMLCanvasElement, stopGame: () => void, size: { w: number, h: number }) {
     this.el = el;
     this.stopGame = stopGame;
     this.size.w = size.w;
@@ -53,7 +53,7 @@ export class Controller {
   async init() {
     // this.createAxesHelper();
     await this.createModels();
-    this.createObjects();
+    await this.createObjects();
 
     this.createLights();
     this.createCamera();
@@ -78,9 +78,15 @@ export class Controller {
     this.enemyModelController = await ModelController.create(baseurl + 'models/stone/scene.gltf', true);
   }
 
-  createObjects() {
+  async createObjects() {
     this.runner = new Runner({...characterSettings, modelController: this.runnerModelController});
-    this.texture = new THREE.TextureLoader().load(baseurl + 'textures/s2-texture.jpg');
+    try {
+      this.texture = await new Promise((resolve, reject) => {
+        new THREE.TextureLoader().load(`${baseurl}textures/s2-texture.jpg`, resolve, undefined, reject);
+      });
+    } catch (e) {
+      this.texture = null;
+    }
     this.ground = new Ground({...groundSettings, texture: this.texture});
 
     this.scene.add(this.ground);
@@ -91,7 +97,7 @@ export class Controller {
   createLights() {
     const ambientLight = new THREE.AmbientLight(0xffffff, .8);
     const dirLight = new THREE.DirectionalLight(0xffffff, .9);
-    dirLight.position.set(0, 5, 15 );
+    dirLight.position.set(0, 5, 15);
     dirLight.target.position.set(0, 4, -10)
     dirLight.castShadow = true;
 
@@ -130,7 +136,7 @@ export class Controller {
   }
 
   enemySpawn(id: number) {
-    if(!this.isGameStart) return;
+    if (!this.isGameStart) return;
 
     const mn = enemySpanSpeed(id)
 
@@ -179,7 +185,7 @@ export class Controller {
     this.sceneUpdate()
     this.stats.end();
 
-    if(this.isGameStart) {
+    if (this.isGameStart) {
       this.animationId = requestAnimationFrame(this.tick);
     }
   }
@@ -202,8 +208,7 @@ export class Controller {
   }
 
 
-
-  resizeHandler () {
+  resizeHandler() {
     this.size.w = window.innerWidth;
     this.size.h = window.innerHeight
 
