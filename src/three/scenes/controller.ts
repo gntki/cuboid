@@ -126,7 +126,7 @@ export class Controller {
 
   createCamera() {
     this.camera = new THREE.PerspectiveCamera(75, this.size.w / this.size.h);
-    this.camera.position.set(0, 3, 6);
+    this.camera.position.set(0, 3, 3);
     this.scene.add(this.camera);
   }
 
@@ -174,6 +174,10 @@ export class Controller {
     //Ограничение дельты в случае потери фокуса
     delta = Math.min(delta, 1/30);
     const _delta = delta * 42;
+
+    if(this.camera.position.z < 6) {
+      this.camera.position.z += delta*2;
+    }
 
     this.orbitControls.update();
 
