@@ -1,6 +1,6 @@
 import * as THREE from 'three'
-import {Box} from "three/geometry/box.ts";
-import type {GroundProps} from "three/geometry/types.ts";
+import {Box} from "three/controllers/objects/box.ts";
+import type {GroundProps} from "three/controllers/objects/types.ts";
 
 export class Ground extends Box {
   texture: THREE.Texture | null = null;

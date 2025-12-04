@@ -1,8 +1,8 @@
 import * as THREE from 'three'
 import {checkCollusion} from "utils/checkCollusion.ts";
-import type {BoxProps} from "three/geometry/types.ts";
+import type {BoxProps} from "three/controllers/objects/types.ts";
 import type {XYZType} from "@constants/settings.ts";
-import type {Ground} from "three/geometry/ground.ts";
+import type {Ground} from "three/controllers/objects/ground.ts";
 
 export class Box extends THREE.Mesh {
   //main

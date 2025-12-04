@@ -1,9 +1,9 @@
 import * as THREE from 'three'
-import {Box} from "three/geometry/box.ts";
+import {Box} from "three/controllers/objects/box.ts";
 import type {ModelController} from "three/controllers/modelController.ts";
-import type {EnemyProps} from "three/geometry/types.ts";
+import type {EnemyProps} from "three/controllers/objects/types.ts";
 import type {XYZType} from "@constants/settings.ts";
-import type {Ground} from "three/geometry/ground.ts";
+import type {Ground} from "three/controllers/objects/ground.ts";
 
 export class Enemy extends Box {
   model: THREE.Object3D | null = null;

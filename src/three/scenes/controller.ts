@@ -5,9 +5,9 @@ import Stats from 'three/examples/jsm/libs/stats.module.js'
 import {characterSettings, enemySettings, groundSettings} from "@constants/settings.ts";
 import {enemySpanSpeed} from "utils/enemySpanSpeed.ts";
 import {ModelController} from "three/controllers/modelController.ts";
-import {Runner} from "three/geometry/runner.ts";
-import {Ground} from "three/geometry/ground.ts";
-import {Enemy} from "three/geometry/enemy.ts";
+import {Runner} from "three/controllers/objects/runner.ts";
+import {Ground} from "three/controllers/objects/ground.ts";
+import {Enemy} from "three/controllers/objects/enemy.ts";
 import {checkCollusion} from "utils/checkCollusion.ts";
 import {ResizeController} from "three/controllers/resizeController/resizeController.ts";
 

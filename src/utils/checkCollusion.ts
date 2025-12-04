@@ -1,4 +1,4 @@
-import type {Box} from "three/geometry/box.ts";
+import type {Box} from "three/controllers/objects/box.ts";
 
 export const checkCollusion = (box1: Box, box2: Box): boolean =>  {
   const collusiontX = box1.right >= box2.left && box1.left <= box2.right;
