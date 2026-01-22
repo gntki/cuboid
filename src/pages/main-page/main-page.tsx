@@ -7,7 +7,7 @@ export const MainPage = () => {
   return (
     <S.MainPageStyle>
       <Main/>
-      <Game/>
+      {/*<Game/>*/}
     </S.MainPageStyle>
   )
 }

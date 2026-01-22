@@ -6,6 +6,6 @@ export const MainPageStyle = styled.div`
   width: 100%;
   height: 100%;
   min-height: 100svh;
-  background: url(${bg}) no-repeat center/cover;
+  // background: url(${bg}) no-repeat center/cover;
   overflow: hidden;
 `

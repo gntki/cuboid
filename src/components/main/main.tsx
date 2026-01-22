@@ -3,9 +3,11 @@ import {End, Start} from "@components";
 import {CSSTransition, SwitchTransition} from "react-transition-group";
 import type {ReactNode} from "react";
 import {MainStyled, Subpage} from "./main.style.ts";
+import {useEffect, useState} from "react";
 
 export const Main = () => {
   const {page} = useAppStore();
+  const [e, setEvent] = useState<DeviceMotionEvent | null>(null);
 
   const pages = {
     start: <Start/>,
@@ -13,13 +15,32 @@ export const Main = () => {
     game: <div style={{pointerEvents: 'none'}}/>
   }
 
+  useEffect(() => {
+    window.addEventListener("devicemotion", (event) => {
+      setEvent(event)
+    });
+
+    return ()=> window.removeEventListener("devicemotion", (event) => {
+      setEvent(event)
+    });
+  }, []);
+
   return (
-    <MainStyled $isGame={page==='game'}>
-      <SwitchTransition>
-        <CSSTransition key={page} timeout={300}>
-          <Subpage>{pages[page] as ReactNode}</Subpage>
-        </CSSTransition>
-      </SwitchTransition>
+    <MainStyled $isGame={page === 'game'}>
+      <p>e.acceleration.x </p><p>{e?.acceleration?.x}</p>
+      <p>e.acceleration.y </p><p>{e?.acceleration?.y}</p>
+      <p>e.acceleration.z </p><p>{e?.acceleration?.z}</p>
+      <p>e.accelerationIncludingGravity.x </p><p>{e?.accelerationIncludingGravity?.x}</p>
+      <p>e.accelerationIncludingGravity.y </p><p>{e?.accelerationIncludingGravity?.y}</p>
+      <p>e.accelerationIncludingGravity.z </p><p>{e?.accelerationIncludingGravity?.z}</p>
+      <p>e.rotationRate.alpha </p><p>{e?.rotationRate?.alpha}</p>
+      <p>e.rotationRate.beta </p><p>{e?.rotationRate?.beta}</p>
+      <p>e.rotationRate.gamma </p><p>{e?.rotationRate?.gamma}</p>
+      {/*<SwitchTransition>*/}
+      {/*  <CSSTransition key={page} timeout={300}>*/}
+      {/*    <Subpage>{pages[page] as ReactNode}</Subpage>*/}
+      {/*  </CSSTransition>*/}
+      {/*</SwitchTransition>*/}
     </MainStyled>
   )
 }
