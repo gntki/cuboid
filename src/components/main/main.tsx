@@ -22,15 +22,6 @@ export const Main = () => {
   };
 
   useEffect(() => {
-    const init = async () => {
-      await requestPermission();
-    };
-    init().catch(error => {
-      console.error('Failed to initialize device orientation:', error);
-    });
-  }, []);
-
-  useEffect(() => {
     let lastUpdate = 0;
 
     const handler = (event: DeviceMotionEvent) => {
