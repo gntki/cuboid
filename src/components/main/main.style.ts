@@ -11,24 +11,19 @@ export const MainStyled = styled.section<{$isGame: boolean}>`
   left: 0;
   width: 100%;
   min-height: 100%;
-  font-size: 12rem;
   z-index: 1;
   pointer-events: none;
   
-  //&:after {
-  //  content: '';
-  //  position: absolute;
-  //  top: 0;
-  //  left: 0;
-  //  width: 100%;
-  //  height: 100%;
-  //  backdrop-filter: blur(11px);
-  //  opacity: 1;
-  //  transition: .3s ease-in-out;
-  //}
-  
-  p {
-    margin: 0 0 15rem;
+  &:after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    backdrop-filter: blur(11px);
+    opacity: 1;
+    transition: .3s ease-in-out;
   }
   
   ${({$isGame}) => $isGame && css`
