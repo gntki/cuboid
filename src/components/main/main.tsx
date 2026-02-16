@@ -12,7 +12,6 @@ export const Main = () => {
   } | null>(null);
 
   const requestPermission = async () => {
-    console.log('click')
     if (
       typeof DeviceOrientationEvent !== "undefined" &&
       typeof (DeviceOrientationEvent as any).requestPermission === "function"

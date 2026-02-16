@@ -13,7 +13,7 @@ export const MainStyled = styled.section<{$isGame: boolean}>`
   min-height: 100%;
   font-size: 10rem;
   z-index: 1;
-  //pointer-events: none;
+  pointer-events: none;
   
   
   p {
