@@ -1,5 +1,5 @@
 import * as S from './main-page.style.ts'
-import {Main} from "@components";
+import {Game, Main} from "@components";
 
 
 export const MainPage = () => {

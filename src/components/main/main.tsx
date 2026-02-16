@@ -1,12 +1,19 @@
 import {useAppStore} from "stores";
-import {MainStyled} from "./main.style.ts";
+import {End, Start} from "@components";
+import {CSSTransition, SwitchTransition} from "react-transition-group";
+import type {ReactNode} from "react";
+import {MainStyled, Subpage} from "./main.style.ts";
 import {useEffect, useState} from "react";
 
 export const Main = () => {
   const {page} = useAppStore();
   const [e, setEvent] = useState<DeviceMotionEvent | null>(null);
 
-
+  const pages = {
+    start: <Start/>,
+    end: <End/>,
+    game: <div style={{pointerEvents: 'none'}}/>
+  }
 
   useEffect(() => {
     window.addEventListener("devicemotion", (event) => {
@@ -29,6 +36,11 @@ export const Main = () => {
       <p>e.rotationRate.alpha </p><p>{e?.rotationRate?.alpha}</p>
       <p>e.rotationRate.beta </p><p>{e?.rotationRate?.beta}</p>
       <p>e.rotationRate.gamma </p><p>{e?.rotationRate?.gamma}</p>
+      {/*<SwitchTransition>*/}
+      {/*  <CSSTransition key={page} timeout={300}>*/}
+      {/*    <Subpage>{pages[page] as ReactNode}</Subpage>*/}
+      {/*  </CSSTransition>*/}
+      {/*</SwitchTransition>*/}
     </MainStyled>
   )
 }
