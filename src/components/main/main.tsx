@@ -9,18 +9,13 @@ export const Main = () => {
 
 
   useEffect(() => {
-    let lastUpdate = 0;
+    window.addEventListener("devicemotion", (event) => {
+      setEvent(event)
+    });
 
-    const handler = (event: DeviceMotionEvent) => {
-      const now = Date.now();
-      if (now - lastUpdate < 200) return; // ⏱ 5 раз в секунду
-
-      lastUpdate = now;
-      setEvent(event);
-    };
-
-    window.addEventListener("devicemotion", handler);
-    return () => window.removeEventListener("devicemotion", handler);
+    return ()=> window.removeEventListener("devicemotion", (event) => {
+      setEvent(event)
+    });
   }, []);
 
   return (
