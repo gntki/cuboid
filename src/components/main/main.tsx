@@ -61,6 +61,9 @@ export const Main = () => {
       <p>e.acceleration.x </p><p>{e?.acceleration?.x}</p>
       <p>e.acceleration.y </p><p>{e?.acceleration?.y}</p>
       <p>e.acceleration.z </p><p>{e?.acceleration?.z}</p>
+      <p>e.accelerationIncludingGravity.x </p><p>{e?.accelerationIncludingGravity?.x}</p>
+      <p>e.accelerationIncludingGravity.y </p><p>{e?.accelerationIncludingGravity?.y}</p>
+      <p>e.accelerationIncludingGravity.z </p><p>{e?.accelerationIncludingGravity?.z}</p>
       <p>e.rotationRate.alpha </p><p>{e?.rotationRate?.alpha}</p>
       <p>e.rotationRate.beta </p><p>{e?.rotationRate?.beta}</p>
       <p>e.rotationRate.gamma </p><p>{e?.rotationRate?.gamma}</p>
